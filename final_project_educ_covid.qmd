@@ -4,3 +4,25 @@ format: html
 editor: visual
 ---
 
+## lien Github et sources des données
+
+## Description des données et des sources 
+
+## Informations basique sur les données brutes 
+
+## Nettoyage des données 
+### UNESCO 
+
+### PISA 2018
+
+### PISA 2022 
+
+## Informations basiques sur les données nettoyées
+
+## Data joining 
+
+## Description des variables importantes 
+
+## Description de la question de recherche 
+
+## Graphical representation of the main variables 
