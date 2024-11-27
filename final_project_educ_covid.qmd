@@ -6,6 +6,14 @@ editor: visual
 
 ## lien Github et sources des données
 
+Le lien vers le projet GitHub: https://github.com/adelecherigny/final_project_educ_covid
+
+### création du data directory
+
+```{r}
+data_dir <- dir.create("data")
+```
+
 ## Description des données et des sources 
 
 ## Informations basique sur les données brutes 
