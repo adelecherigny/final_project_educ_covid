@@ -14,6 +14,31 @@ Le lien vers le projet GitHub: https://github.com/adelecherigny/final_project_ed
 data_dir <- dir.create("data")
 ```
 
+### Chargement de la base UNESCO
+
+Téléchargement du fichier depuis internet grâce au lien:
+```{r}
+download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/05/UNESCO_school_closures_database.xlsx", destfile = "data/school_closure.xlsx")
+```
+Chargement du fichier
+```{r}
+library(readxl)
+school_closure_xlsx <- read_xlsx("data/school_closure.xlsx")
+```
+
+Conversion au format csv
+```{r}
+school_closure_xlsx <- as.data.frame(school_closure_xlsx)
+write.csv(school_closure_xlsx, "data/school_closure.csv", row.names = FALSE)
+```
+
+Suppression du fichier xlsx et chargement du fichier csv
+```{r}
+file.remove("data/school_closure.xlsx")
+rm(school_closure_xlsx)
+library(vroom)
+school_closure <- vroom("data/school_closure.csv")
+```
 ## Description des données et des sources 
 
 ## Informations basique sur les données brutes 
