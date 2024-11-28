@@ -5,21 +5,19 @@ editor: visual
 ---
 
 ## lien Github et sources des données
-
 Le lien vers le projet GitHub: https://github.com/adelecherigny/final_project_educ_covid
 
 ### création du data directory
-
 ```{r}
 data_dir <- dir.create("data")
 ```
 
 ### Chargement de la base UNESCO
-
 Téléchargement du fichier depuis internet grâce au lien:
 ```{r}
 download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/05/UNESCO_school_closures_database.xlsx", destfile = "data/school_closure.xlsx")
 ```
+
 Chargement du fichier
 ```{r}
 library(readxl)
@@ -39,6 +37,75 @@ rm(school_closure_xlsx)
 library(vroom)
 school_closure <- vroom("data/school_closure.csv")
 ```
+
+### Chargement des bases PISA
+Les fichiers PISA ne sont pas téléchargeables directement depuis internet (error 403), nous avons ensuite de le faire par l'intermédiaire d'un drive ne ligne mais nous avons recontré le même type d'erreur. Et nous ne pouvons pas les mettre sur Git car ils sont trop volumineux (plusieurs Go).
+Par conséquent, nous nous en excusons mais nous allons mettre les instructions avec les liens nécessaires pour récupérer les fichiers ici. 
+les manipulations dans cette partie prennent beaucoup de temps (plusieurs minutes pour certaines) en raison de la taille des fichiers.
+
+#### PISA 2018 (Student Questionnaire)
+Téléchargement du fichier PISA 2018 depuis son lien internet: https://www.oecd.org/content/dam/oecd/en/data/datasets/pisa/pisa-2018-datasets/ssas-sps-data-files/SAS_STU_QQQ.zip
+
+Une fois le fichier téléchargé il faut le mettre dans le data directory (les fonctions interactives n'étant pas disponible sur Quarto il faut décommenter les ligne si dessous une fois sur R pour qu'elle fonctionne ou alors mettre manuellement le fichier zip dans le bon dossier)
+```{r}
+##file_path_2018 <- file.choose() ## ici il faut chosir le fichier ZIP PISA 2018 que vous venez de télécharger
+##file.rename(file_path_2018, to = "data/PISA_2018.zip" )
+```
+Si vous décidez de placer le fichier manuellement dans le data directory vous pouvez utiliser directement cette commande
+```{r}
+file.rename(from = "data/SAS_STU_QQQ.zip", to = "data/PISA_2018.zip" )
+```
+
+Maintenant que le fichier zippé est dans le data directory, on va le dézippé et le mettre au format csv
+```{r}
+unzip("data/PISA_2018.zip", exdir="data/PISA_2018")
+library(haven)
+PISA_2018_sas <- read_sas("data/PISA_2018/STU/cy07_msu_stu_qqq.sas7bdat")
+write.csv(PISA_2018_sas, "data/PISA_2018.csv", row.names = FALSE)
+```
+
+Suppression des fichiers inutiles et chargement du fichier csv
+```{r}
+rm(PISA_2018_sas)
+```
+
+```{r}
+library(vroom)
+PISA_2018 <- vroom("data/PISA_2018.csv")
+```
+
+#### PISA 2022 (Student Questionnaire)
+Téléchargement du fichier PISA 2022 depuis son lien internet: https://webfs.oecd.org/pisa2022/STU_QQQ_SAS.zip
+
+Une fois le fichier téléchargé il faut le mettre dans le data directory (les fonctions interactives n'étant pas disponible sur Quarto il faut décommenter les ligne si dessous une fois sur R pour qu'elle fonctionne ou alors mettre manuellement le fichier zip dans le bon dossier ie le data directory crée au départ)
+```{r}
+##file_path_2022 <- file.choose() ## ici il faut chosir le fichier ZIP PISA 2022 que vous venez de télécharger
+##file.rename(file_path_2022, to = "data/PISA_2022.zip" )
+```
+Si vous décidez de placer le fichier manuellement dans le data directory vous pouvez utiliser directement cette commande
+```{r}
+file.rename(from = "data/STU_QQQ_SAS.zip", to = "data/PISA_2022.zip" )
+```
+
+Maintenant que le fichier zippé est dans le data directory, on va le dézippé et le mettre au format csv
+```{r}
+unzip("data/PISA_2022.zip", exdir="data/PISA_2022")
+library(haven)
+PISA_2022_sas <- read_sas("data/PISA_2022/CY08MSP_STU_QQQ.SAS7BDAT")
+write.csv(PISA_2022_sas, "data/PISA_2022.csv", row.names = FALSE)
+```
+
+Suppression des fichiers inutiles et chargement du fichier csv
+```{r}
+rm(PISA_2022_sas)
+```
+
+```{r}
+library(vroom)
+PISA_2022 <- vroom("data/PISA_2022.csv")
+```
+
+
 ## Description des données et des sources 
 
 ## Informations basique sur les données brutes 
