@@ -19,7 +19,10 @@ download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/0
 ```
 
 Chargement du fichier
+Selon certains navigateurs il se peut que le fichier soit zippé, si c'est le cas il faut effectuer la commande suivante (sinon vous pouvez quand même lancer le code cette commande ne sera juste pas appliqué si le fichier n'est pas zippé)
 ```{r}
+unzip ("data/school_closure.xlsx", exdir = "data/school_closure")
+```
 library(readxl)
 school_closure_xlsx <- read_xlsx("data/school_closure.xlsx")
 ```
