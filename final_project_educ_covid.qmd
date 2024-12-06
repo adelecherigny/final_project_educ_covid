@@ -130,6 +130,7 @@ Ils contiennent les réponses données par les étudiants, et leurs parents au q
 
 Nous allons utiliser ces datasets pour voir le niveau des élèves avant la pandémie de COVID 19 en sélectionnant les questions d'intérêt et voir les différences qui existaient déjà entre les pays de l’OCDE avant la pandémie et le confinement. 
 
+
 ### description du dataset de l'UNESCO 
 récupérées au format xlsx, converties en csv
 
@@ -148,14 +149,114 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 
 
 
-## Informations basique sur les données brutes 
+## Informations basique sur les données brutes
+
+### Informations sur les données brutes de l'UNESCO 
+
+### Informations sur les données brutes de PISA 2018
+
+```{r}
+nombre_lignes <- PISA_2018 |> nrow()
+nombre_colonnes <- PISA_2018 |> ncol()
+cat("Le fichier PISA 2018 contient", nombre_lignes, "lignes et", nombre_colonnes, "colonnes")
+```
+
+
+### Informations sur les données brutes de PISA 2022 
+
 
 ## Nettoyage des données 
 ### UNESCO 
 
 ### PISA 2018
 
+Afin d'agréger les données PISA par pays et par discipline, nous suivons la méthode proposée par l'OCDE.
+
+NB : nous calculerons les moyennnes des valeurs plausibles des scores aux tests PISA. Les valeurs plausibles sont une technique statistique utilisée afin d'estimer les performances d'un élève à partir de tests standardisés tout en prenant en compte l'incertitude associée à ces estimations. C'est une estimation probabiliste du score, tirée d'une distribution statistique qui reflète les réponses de l'élève au test, les caractéristiques de l'élève et les propriétés psychométriques du test comme sa difficulté ou sa structure. Cela explique pourquoi chaque pays (la moyenne des élèves) n'a pas un seul score, mais plusieurs valeurs plausibles dont nous devrons ensuite déduire la moyenne. 
+
+Nous devons utiliser des valeurs plausibles dans la mesure où les évaluations PISA sont basées sur des tests partiels. Chaque élève ne répond qu'à un sous-ensemble des questions disponibles et il n'est ainsi pas possible de calculer directement un "score vrai" pour chaque élève. 
+
+```{r}
+library(dplyr)
+column_names <- names(select(PISA_2018, starts_with("PV")))
+print(column_names)
+```
+
+
+```{r}
+# Initialisation d'une liste pour stocker les résultats
+results_list <- list()
+
+# Chargement des bibliothèques nécessaires
+library(intsvy)
+library(dplyr)
+library(tidyr)
+
+# Liste des domaines à analyser
+domains <- c("MATH", "SCIE", "READ")
+
+# Boucle pour calculer les moyennes des PVs pour chaque domaine
+for (domain in domains) {
+  for (pv in paste0("PV", 1:10, domain)) {
+    result <- pisa.mean(variable = pv,
+                        by = "CNT",
+                        data = PISA_2018)
+    result$PV <- pv  # Ajouter une colonne pour identifier le PV
+    result$Domain <- domain  # Ajouter une colonne pour identifier le domaine
+    results_list[[pv]] <- result
+  }
+}
+
+# Combiner tous les résultats en un seul dataframe
+PISA_2018_agregate <- do.call(rbind, results_list)
+
+# Transformer le dataframe pour calculer la moyenne par domaine et par pays
+PISA_2018_final <- PISA_2018_agregate %>%
+  select(CNT, Domain, PV, Mean) %>%  # Garder les colonnes nécessaires
+  group_by(CNT, Domain) %>%  # Grouper par pays et domaine
+  summarise(Mean_PV = mean(Mean, na.rm = TRUE), .groups = "drop") %>%  # Calculer la moyenne des PVs par domaine
+  pivot_wider(names_from = Domain, values_from = Mean_PV)  # Réorganiser pour avoir une colonne par domaine
+
+# Afficher le tableau final
+print(PISA_2018_final)
+
+```
+
 ### PISA 2022 
+
+```{r}
+# Initialisation d'une liste pour stocker les résultats
+results_list <- list()
+
+# Liste des domaines à analyser
+domains <- c("MATH", "SCIE", "READ")
+
+# Boucle pour calculer les moyennes des PVs pour chaque domaine
+for (domain in domains) {
+  for (pv in paste0("PV", 1:10, domain)) {
+    result <- pisa.mean(variable = pv,
+                        by = "CNT",
+                        data = PISA_2022)
+    result$PV <- pv  # Ajouter une colonne pour identifier le PV
+    result$Domain <- domain  # Ajouter une colonne pour identifier le domaine
+    results_list[[pv]] <- result
+  }
+}
+
+# Combiner tous les résultats en un seul dataframe
+PISA_2022_agregate <- do.call(rbind, results_list)
+
+# Transformer le dataframe pour calculer la moyenne par domaine et par pays
+PISA_2022_final <- PISA_2022_agregate %>%
+  select(CNT, Domain, PV, Mean) %>%  # Garder les colonnes nécessaires
+  group_by(CNT, Domain) %>%  # Grouper par pays et domaine
+  summarise(Mean_PV = mean(Mean, na.rm = TRUE), .groups = "drop") %>%  # Calculer la moyenne des PVs par domaine
+  pivot_wider(names_from = Domain, values_from = Mean_PV)  # Réorganiser pour avoir une colonne par domaine
+
+# Afficher le tableau final
+print(PISA_2022_final)
+
+```
 
 ## Informations basiques sur les données nettoyées
 
