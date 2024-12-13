@@ -153,16 +153,28 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 
 ### Informations sur les données brutes de l'UNESCO 
 
+```{r}
+nombre_lignes_unesco <- school_closure |> nrow()
+nombre_colonnes_unesco <- school_closure |> ncol()
+cat("Le fichier UNESCO contient", nombre_lignes_unesco, "lignes et", nombre_colonnes_unesco, "colonnes")
+```
+
 ### Informations sur les données brutes de PISA 2018
 
 ```{r}
-nombre_lignes <- PISA_2018 |> nrow()
-nombre_colonnes <- PISA_2018 |> ncol()
-cat("Le fichier PISA 2018 contient", nombre_lignes, "lignes et", nombre_colonnes, "colonnes")
+nombre_lignes_PISA_2018 <- PISA_2018 |> nrow()
+nombre_colonnes_PISA_2018 <- PISA_2018 |> ncol()
+cat("Le fichier PISA 2018 contient", nombre_lignes_PISA_2018, "lignes et", nombre_colonnes_PISA_2018, "colonnes")
 ```
 
 
 ### Informations sur les données brutes de PISA 2022 
+
+```{r}
+nombre_lignes_PISA_2022 <- PISA_2022 |> nrow()
+nombre_colonnes_PISA_2022 <- PISA_2022 |> ncol()
+cat("Le fichier PISA 2022 contient", nombre_lignes_PISA_2022, "lignes et", nombre_colonnes_PISA_2022, "colonnes")
+```
 
 
 ## Nettoyage des données 
@@ -175,12 +187,6 @@ Afin d'agréger les données PISA par pays et par discipline, nous suivons la m�
 NB : nous calculerons les moyennnes des valeurs plausibles des scores aux tests PISA. Les valeurs plausibles sont une technique statistique utilisée afin d'estimer les performances d'un élève à partir de tests standardisés tout en prenant en compte l'incertitude associée à ces estimations. C'est une estimation probabiliste du score, tirée d'une distribution statistique qui reflète les réponses de l'élève au test, les caractéristiques de l'élève et les propriétés psychométriques du test comme sa difficulté ou sa structure. Cela explique pourquoi chaque pays (la moyenne des élèves) n'a pas un seul score, mais plusieurs valeurs plausibles dont nous devrons ensuite déduire la moyenne. 
 
 Nous devons utiliser des valeurs plausibles dans la mesure où les évaluations PISA sont basées sur des tests partiels. Chaque élève ne répond qu'à un sous-ensemble des questions disponibles et il n'est ainsi pas possible de calculer directement un "score vrai" pour chaque élève. 
-
-```{r}
-library(dplyr)
-column_names <- names(select(PISA_2018, starts_with("PV")))
-print(column_names)
-```
 
 
 ```{r}
@@ -225,6 +231,11 @@ print(PISA_2018_final)
 ### PISA 2022 
 
 ```{r}
+unique(PISA_2022$CNT)
+```
+
+
+```{r}
 # Initialisation d'une liste pour stocker les résultats
 results_list <- list()
 
@@ -260,6 +271,28 @@ print(PISA_2022_final)
 
 ## Informations basiques sur les données nettoyées
 
+### Unesco 
+```{r}
+nombre_lignes_unesco_clean <- school_closure |> nrow()
+nombre_colonnes_unesco_clean <- school_closure |> ncol()
+cat("Le fichier UNESCO nettoyé contient", nombre_lignes_unesco_clean, "lignes et", nombre_colonnes_unesco_clean, "colonnes")
+```
+
+### PISA 2018
+
+```{r}
+nombre_lignes_PISA_2018_clean <- PISA_2018_final |> nrow()
+nombre_colonnes_PISA_2018_clean <- PISA_2018_final |> ncol()
+cat("Le fichier PISA 2018 nettoyé contient", nombre_lignes_PISA_2018_clean, "lignes et", nombre_colonnes_PISA_2018_clean, "colonnes")
+```
+
+### PISA 2022 
+
+```{r}
+nombre_lignes_PISA_2022_clean <- PISA_2022_final |> nrow()
+nombre_colonnes_PISA_2022_clean <- PISA_2022_final |> ncol()
+cat("Le fichier PISA 2022 nettoyé contient", nombre_lignes_PISA_2022_clean, "lignes et", nombre_colonnes_PISA_2022_clean, "colonnes")
+```
 ## Data joining 
 
 ## Description des variables importantes 
