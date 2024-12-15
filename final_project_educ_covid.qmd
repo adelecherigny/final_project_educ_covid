@@ -288,6 +288,57 @@ print(PISA_2018_final)
 
 ### PISA 2022 
 
+```{r}
+# Initialisation d'une liste pour stocker les résultats
+results_list <- list()
+
+# Chargement des bibliothèques nécessaires
+library(intsvy)
+library(dplyr)
+library(tidyr)
+
+# Liste des domaines à analyser
+domains <- c("MATH", "SCIE", "READ")
+
+# Boucle pour calculer les moyennes des PVs pour chaque domaine
+for (domain in domains) {
+  for (pv in paste0("PV", 1:10, domain)) {
+    result <- pisa.mean.pv(pvlabel = pv,
+                        by = "CNT",
+                        data = PISA_2022)
+    result$PV <- pv  # Ajouter une colonne pour identifier le PV
+    result$Domain <- domain  # Ajouter une colonne pour identifier le domaine
+    results_list[[pv]] <- result
+  }
+}
+
+# Combiner tous les résultats en un seul dataframe
+PISA_2022_agregate <- do.call(rbind, results_list)
+```
+
+
+```{r}
+# Transformer le dataframe pour calculer la moyenne par domaine et par pays
+PISA_2022_final <- PISA_2022_agregate %>%
+  select(CNT, Domain, PV, Mean) %>%  # Garder les colonnes nécessaires
+  group_by(CNT, Domain) %>%  # Grouper par pays et domaine
+  summarise(Mean_PV = mean(Mean, na.rm = TRUE), .groups = "drop") %>%  # Calculer la moyenne des PVs par domaine
+  pivot_wider(names_from = Domain, values_from = Mean_PV)  # Réorganiser pour avoir une colonne par domaine
+
+# Afficher le tableau final
+print(PISA_2022_final)
+```
+On renomme les colonnes pour préparer le data joining.
+```{r}
+PISA_2022_final <- PISA_2022_final %>%
+  rename(
+    READ_2022 = READ,
+    SCIE_2022 = SCIE,
+    MATH_2022 = MATH
+  )
+```
+
+
 ## Informations basiques sur les données nettoyées
 
 ### Unesco 
