@@ -204,6 +204,39 @@ cat("Le fichier PISA 2022 contient", nombre_lignes_PISA_2022, "lignes et", nombr
 
 ## Nettoyage des données 
 ### UNESCO 
+Installation des packages nécessaires
+```{r}
+library(dplyr)
+```
+
+Création d'une colonne indiquant le nombre de jours où les établissements scolaires ont été fermés ou partiellement fermés.
+```{r}
+school_closure <- school_closure %>%
+  mutate(closure_status_large = ifelse(Status == "Closed due to COVID-19" | Status == "Partially open", 1, 0)) %>%
+  group_by(Country) %>%
+  mutate(closure_large_count = sum(closure_status_large))
+```
+
+Création d'une colonne indiquant le nombre de jours où les établissements scolaires ont été fermés (on ne compte pas ici les jours où les établissements étaient partiellement fermés).
+```{r}
+school_closure <- school_closure %>%
+  mutate(closure_status_restricted = ifelse(Status == "Closed due to COVID-19", 1, 0)) %>%
+  group_by(Country) %>%
+  mutate(closure_restricted_count = sum(closure_status_restricted))
+```
+
+Regroupement des informations par pays pour préparer le datajoining
+```{r}
+school_closure <- school_closure%>%
+  select(Country, `Country ID`, `Region 3`, `Distance learning modalities (TV)`, `Distance learning modalities (Radio)`, `Distance learning modalities (Online)`, `Distance learning modalities (Global)`, closure_large_count, closure_restricted_count)%>%
+  distinct(Country, .keep_all = TRUE)
+```
+
+On renomme les variables pour préparer le data joining
+```{r}
+school_closure<- school_closure%>%
+  rename(CNT  = `Country ID`)
+```
 
 ### PISA 2018
 
