@@ -14,7 +14,7 @@ data_dir <- dir.create("data")
 
 ### Chargement de la base UNESCO
 Téléchargement du fichier depuis internet grâce au lien:
-```{r, cache=TRUE}
+```{r}
 download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/05/UNESCO_school_closures_database.xlsx", destfile = "data/school_closure.xlsx")
 ```
 
@@ -25,19 +25,19 @@ unzip ("data/school_closure.xlsx", exdir = "data/school_closure")
 
 
 Chargement du fichier
-```{r , cache=TRUE}
+```{r}
 library(readxl)
 school_closure_xlsx <- read_xlsx("data/school_closure.xlsx")
 ```
 
 Conversion au format csv
-```{r , cache=TRUE}
+```{r}
 school_closure_xlsx <- as.data.frame(school_closure_xlsx)
 write.csv(school_closure_xlsx, "data/school_closure.csv", row.names = FALSE)
 ```
 
 Suppression du fichier xlsx et chargement du fichier csv
-```{r, cache=TRUE}
+```{r}
 file.remove("data/school_closure.xlsx")
 rm(school_closure_xlsx)
 library(vroom)
@@ -53,29 +53,40 @@ les manipulations dans cette partie prennent beaucoup de temps (plusieurs minute
 Téléchargement du fichier PISA 2018 depuis son lien internet: https://www.oecd.org/content/dam/oecd/en/data/datasets/pisa/pisa-2018-datasets/ssas-sps-data-files/SAS_STU_QQQ.zip
 
 Une fois le fichier téléchargé il faut le mettre dans le data directory (les fonctions interactives n'étant pas disponible sur Quarto il faut décommenter les ligne si dessous une fois sur R pour qu'elle fonctionne ou alors mettre manuellement le fichier zip dans le bon dossier)
-```{r, cache=TRUE}
+```{r}
 ##file_path_2018 <- file.choose() ## ici il faut chosir le fichier ZIP PISA 2018 que vous venez de télécharger
 ##file.rename(file_path_2018, to = "data/PISA_2018.zip" )
 ```
 Si vous décidez de placer le fichier manuellement dans le data directory vous pouvez utiliser directement cette commande
-```{r, cache=TRUE}
+```{r}
 file.rename(from = "data/SAS_STU_QQQ.zip", to = "data/PISA_2018.zip" )
 ```
 
 Maintenant que le fichier zippé est dans le data directory, on va le dézippé et le mettre au format csv
-```{r, cache=TRUE}
+```{r, cache = FALSE}
 unzip("data/PISA_2018.zip", exdir="data/PISA_2018")
+```
+
+On charge le fichier sas en séléctionnant seulement les colonnes qui nous intéresse (nous faisons ce tri au préalable pour ne pas utiliser trop de mémoire)
+```{r, cache = FALSE}
 library(haven)
-PISA_2018_sas <- read_sas("data/PISA_2018/STU/cy07_msu_stu_qqq.sas7bdat")
+colonnes_utiles <- c(
+  "CNT", "W_FSTUWT", paste0("W_FSTURWT", 1:80), 
+  paste0("PV", 1:10, "MATH"), paste0("PV", 1:10, "SCIE"), paste0("PV", 1:10, "READ")
+)
+PISA_2018_sas <- read_sas("data/PISA_2018/STU/cy07_msu_stu_qqq.sas7bdat", col_select = all_of(colonnes_utiles))
+```
+on convertit le fichier au format csv pour des raisons de commodités 
+```{r, cache = FALSE}
 write.csv(PISA_2018_sas, "data/PISA_2018.csv", row.names = FALSE)
 ```
 
 Suppression des fichiers inutiles et chargement du fichier csv
-```{r, cache=TRUE}
+```{r}
 rm(PISA_2018_sas)
 ```
 
-```{r, cache=TRUE}
+```{r}
 library(vroom)
 PISA_2018 <- vroom("data/PISA_2018.csv")
 ```
@@ -84,29 +95,43 @@ PISA_2018 <- vroom("data/PISA_2018.csv")
 Téléchargement du fichier PISA 2022 depuis son lien internet: https://webfs.oecd.org/pisa2022/STU_QQQ_SAS.zip
 
 Une fois le fichier téléchargé il faut le mettre dans le data directory (les fonctions interactives n'étant pas disponible sur Quarto il faut décommenter les ligne si dessous une fois sur R pour qu'elle fonctionne ou alors mettre manuellement le fichier zip dans le bon dossier ie le data directory crée au départ)
-```{r, cache=TRUE}
+```{r}
 ##file_path_2022 <- file.choose() ## ici il faut chosir le fichier ZIP PISA 2022 que vous venez de télécharger
 ##file.rename(file_path_2022, to = "data/PISA_2022.zip" )
 ```
 Si vous décidez de placer le fichier manuellement dans le data directory vous pouvez utiliser directement cette commande
-```{r, cache=TRUE}
+```{r}
 file.rename(from = "data/STU_QQQ_SAS.zip", to = "data/PISA_2022.zip" )
 ```
 
 Maintenant que le fichier zippé est dans le data directory, on va le dézippé et le mettre au format csv
-```{r, cache=TRUE}
+```{r, cache = FALSE}
 unzip("data/PISA_2022.zip", exdir="data/PISA_2022")
 library(haven)
-PISA_2022_sas <- read_sas("data/PISA_2022/CY08MSP_STU_QQQ.SAS7BDAT")
+```
+
+On charge le fichier sas en séléctionnant seulement les colonnes qui nous intéresse (nous faisons ce tri au préalable pour ne pas utiliser trop de mémoire)
+```{r, cache = FALSE}
+library(haven)
+colonnes_utiles <- c(
+  "CNT", "W_FSTUWT", paste0("W_FSTURWT", 1:80), 
+  paste0("PV", 1:10, "MATH"), paste0("PV", 1:10, "SCIE"), paste0("PV", 1:10, "READ")
+)
+PISA_2022_sas <- read_sas("data/PISA_2022/CY08MSP_STU_QQQ.SAS7BDAT", col_select = all_of(colonnes_utiles))
+
+```
+
+on convertit le fichier au format csv pour des raisons de commodités 
+```{r, cache = FALSE}
 write.csv(PISA_2022_sas, "data/PISA_2022.csv", row.names = FALSE)
 ```
 
 Suppression des fichiers inutiles et chargement du fichier csv
-```{r, cache=TRUE}
+```{r}
 rm(PISA_2022_sas)
 ```
 
-```{r, cache=TRUE}
+```{r}
 library(vroom)
 PISA_2022 <- vroom("data/PISA_2022.csv")
 ```
