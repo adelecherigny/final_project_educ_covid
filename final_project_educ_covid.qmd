@@ -199,26 +199,26 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 
 |                                               | Valeurs         |  
 |-----------------------------------------------|-----------------|
-| Nombre d'observations (nombre de lignes)      | r nrow(school_closure)     |  
-| Nombre de variables (nombre de colonne)       | r ncol(school_closure)     |
-| Nombre de pays considérés                     | r length(unique(school_closure$Country)) |
-| Période de temps considérée                   | r paste(range(school_closure$Date, na.rm = TRUE), collapse = " to ")|
+| Nombre d'observations (nombre de lignes)      | `r nrow(school_closure)`     |  
+| Nombre de variables (nombre de colonne)       | `r ncol(school_closure)`     |
+| Nombre de pays considérés                     | `r length(unique(school_closure$Country))` |
+| Période de temps considérée                   | `r paste(range(school_closure$Date, na.rm = TRUE), collapse = " to ")`|
 
 ### Informations sur les données brutes de PISA 2018
 
 |                                          | Valeurs                           |
 |---------------------------------------|---------------------------------|
-| Nombre d'observations (nombre de lignes) | r nrow(PISA_2018)                 |
-| Nombre de variables (nombre de colonne)  | r ncol(PISA_2018)                 |
-| Nombre de pays considérés                | r length(unique((PISA_2018\$CNT)) |
+| Nombre d'observations (nombre de lignes) | `r nrow(PISA_2018)`                 |
+| Nombre de variables (nombre de colonne)  | `r ncol(PISA_2018)`                 |
+| Nombre de pays considérés                | `r length(unique((PISA_2018\$CNT))` |
 
 ### Informations sur les données brutes de PISA 2022
 
 |                                          | Valeurs                           |
 |---------------------------------------|---------------------------------|
-| Nombre d'observations (nombre de lignes) | r nrow(PISA_2022)                 |
-| Nombre de variables (nombre de colonne)  | r ncol(PISA_2022)                 |
-| Nombre de pays considérés                | r length(unique((PISA_2022\$CNT)) |
+| Nombre d'observations (nombre de lignes) | `r nrow(PISA_2022)`                 |
+| Nombre de variables (nombre de colonne)  | `r ncol(PISA_2022)`                 |
+| Nombre de pays considérés                | `r length(unique((PISA_2022\$CNT))` |
 
 
 ## Nettoyage des données
@@ -401,23 +401,23 @@ print(PISA_2022_final)
 
 |                                               | Valeurs         |  
 |-----------------------------------------------|-----------------|
-| Nombre d'observations (nombre de lignes)      | r nrow(school_closure)     |  
-| Nombre de variables (nombre de colonne)       | r ncol(school_closure)     |
+| Nombre d'observations (nombre de lignes)      | `r nrow(school_closure)`     |  
+| Nombre de variables (nombre de colonne)       | `r ncol(school_closure)`     |
 
 
 ### PISA 2018
 
 |                                               | Valeurs         |  
 |-----------------------------------------------|-----------------|
-| Nombre d'observations (nombre de lignes)      | r nrow(PISA_2018_final)     |  
-| Nombre de variables (nombre de colonne)       | r ncol(PISA_2018_final)     |
+| Nombre d'observations (nombre de lignes)      | `r nrow(PISA_2018_final)`     |  
+| Nombre de variables (nombre de colonne)       | `r ncol(PISA_2018_final)`     |
 
 ### PISA 2022
 
 |                                               | Valeurs         |  
 |-----------------------------------------------|-----------------|
-| Nombre d'observations (nombre de lignes)      | r nrow(PISA_2022_final)     |  
-| Nombre de variables (nombre de colonne)       | r ncol(PISA_2022_final)     |
+| Nombre d'observations (nombre de lignes)      | `r nrow(PISA_2022_final)`     |  
+| Nombre de variables (nombre de colonne)       | `r ncol(PISA_2022_final)`     |
 
 ## Data joining
 
