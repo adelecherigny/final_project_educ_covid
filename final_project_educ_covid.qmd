@@ -503,3 +503,147 @@ Une mise en valeur des inégalités sociales dans l'enseignement à distance per
 Ainsi, grâce aux données de l'UNESCO et de l'OCDE, notre projet ambitionne de mettre en lumière l'impact de la pandémie sur les performances scolaires et de potentielles inégalités générationnelles et sociales augmentées. Nos conclusions nous permettront de fournir des recommandations concrètes pour guider les décideurs politiques dans la mise en œuvre de politiques éducatives plus inclusives et résilientes face à de futures crises.
 
 ## Graphical representation of the main variables
+Chargement des packages nécessaires 
+```{r}
+library(ggplot2)
+library(patchwork)
+```
+
+### Moyennes des scores
+#### Maths
+```{r}
+graph_mean_math_2018<-df_final%>%
+  ggplot(aes(x= Mean_MATH_2018)) + 
+  geom_density() 
+```
+
+```{r}
+graph_mean_math_2022<-df_final%>%
+  ggplot(aes(x= Mean_MATH_2022)) + 
+  geom_density()
+```
+
+```{r}
+graph_mean_math_2018 + graph_mean_math_2022 
+```
+#### Sciences
+```{r}
+graph_mean_scie_2018<-df_final%>%
+  ggplot(aes(x= Mean_SCIE_2018)) + 
+  geom_density() 
+```
+
+```{r}
+graph_mean_scie_2022<-df_final%>%
+  ggplot(aes(x= Mean_SCIE_2022)) + 
+  geom_density()
+```
+
+```{r}
+graph_mean_scie_2018 + graph_mean_scie_2022 
+```
+
+#### Lecture
+```{r}
+graph_mean_read_2018<-df_final%>%
+  ggplot(aes(x= Mean_READ_2018)) + 
+  geom_density() 
+```
+
+```{r}
+graph_mean_read_2022<-df_final%>%
+  ggplot(aes(x= Mean_READ_2022)) + 
+  geom_density()
+```
+
+```{r}
+graph_mean_read_2018 + graph_mean_read_2022 
+```
+
+
+### Écarts types des scores
+#### Maths
+```{r}
+graph_sd_math_2018<-df_final%>%
+  ggplot(aes(x= SD_MATH_2018)) + 
+  geom_density() 
+```
+
+```{r}
+graph_sd_math_2022<-df_final%>%
+  ggplot(aes(x= SD_MATH_2022)) + 
+  geom_density()
+```
+
+```{r}
+graph_sd_math_2018 + graph_sd_math_2022 
+```
+#### Sciences
+```{r}
+graph_sd_scie_2018<-df_final%>%
+  ggplot(aes(x= SD_SCIE_2018)) + 
+  geom_density() 
+```
+
+```{r}
+graph_sd_scie_2022<-df_final%>%
+  ggplot(aes(x= SD_SCIE_2022)) + 
+  geom_density()
+```
+
+```{r}
+graph_sd_scie_2018 + graph_sd_scie_2022 
+```
+
+#### Lecture
+
+```{r}
+graph_sd_read_2018<-df_final%>%
+  ggplot(aes(x= SD_READ_2018)) + 
+  geom_density() 
+```
+
+```{r}
+graph_sd_read_2022<-df_final%>%
+  ggplot(aes(x= SD_READ_2022)) + 
+  geom_density()
+```
+
+```{r}
+graph_sd_read_2018 + graph_sd_read_2022 
+```
+#### Fermetures des écoles 
+Graphique avec la prise en compte élargie de la fermeture des écoles (partielle et totale).
+```{r}
+df_final%>%
+  ggplot(aes(x= closure_large_count))+
+  geom_density()
+```
+Graphique avec la prise en compte restreinte de la fermeture des écoles (seulement totale).
+```{r}
+df_final%>%
+  ggplot(aes(x= closure_restricted_count))+
+  geom_density()
+```
+### Niveau de revenu des pays 
+```{r}
+df_final%>%
+  ggplot(aes(x= `Region 3`, fill = `Region 3`))+
+  geom_bar()
+```
+La faible présence de pays à moyens et bas revenus par rapport à ceux à haut revenu s'explique par le fait que les enquêtes PISA sont réalisées par l'OCDE pour les pays membres et partenaires qui se composent essentiellement de pays à haut et moyens revenus.
+
+### Les modalités d'études à distance mises en place par le pays
+```{r}
+df_final%>%
+  ggplot(aes(x= `Distance learning modalities (Global)`))+
+  geom_bar()
+```
+
+Il semble intéressant de regarder également les modalités d'enseignement à distance mise en place par les pays selon le niveau de revenu
+```{r}
+df_final%>%
+  ggplot(aes(x= `Distance learning modalities (Global)`, fill = `Region 3`))+
+  geom_bar()
+```
+
