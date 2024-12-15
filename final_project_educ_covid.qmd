@@ -463,6 +463,10 @@ knitr::kable(df_final, caption = "Dataframe utilisé pour l'analyse")
 Pour analyser l'évolution du niveau des élèves nous avons utilisé les plausibles values des enquêtes PISA. Comme expliqué plus haut ces plausibles values sont des scores "plausibles" que les élèves qui ont répondu au questionnaire auraient pu obtenir. 
 Il y a dix valeurs plausibles pour chaque matières (ici nous avons sélectionné les maths, les sciences et la lecture) et pour chaque matière nous avons fait la moyenne des valeurs plausibles par pays. Cela nous donne donc une indication du niveau des élèves de 15ans pour un pays donné. Plus la moyenne d'un pays est élevée plus cela signifie que le pays a obtenu des bons résultats.
 
+### Les écarts types des scores plausibles par pays
+Les écarts types nous renseigne sur l'homogénéité du niveau des élèves dans un pays. Plus l'écart type est élèvé plus cela signifie que les résultats des élèves sont hétérogènes. Ainsi les écarts types peuvent renseigner sur les ingéalités scoalires qui peuvent se manifester par des différences de niveau au sein d'un pays. 
+Leur comparaisons permet aussi de voir si le covid a engendré plus ou moins d'inégalités selon les pays. 
+
 ### Les fermetures d'établissement scolaires 
 Pour étudier l'impact de la crise du covid nous avons regarder le nombre de jours où les écoles ont été fermées ou partiellement fermées durant la période de la crise. Ces variables (large et restricted) nous indique pour chaque pays le nombre de jours de fermeture.
 
