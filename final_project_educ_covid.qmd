@@ -5,38 +5,45 @@ editor: visual
 ---
 
 ## lien Github et sources des données
+
 Le lien vers le projet GitHub: https://github.com/adelecherigny/final_project_educ_covid
 
 ### création du data directory
+
 ```{r}
 data_dir <- dir.create("data")
 ```
 
 ### Chargement de la base UNESCO
+
 Téléchargement du fichier depuis internet grâce au lien:
+
 ```{r}
 download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/05/UNESCO_school_closures_database.xlsx", destfile = "data/school_closure.xlsx")
 ```
 
 Selon certains navigateurs il se peut que le fichier soit zippé, si c'est le cas il faut effectuer la commande suivante (sinon vous pouvez quand même lancer le code cette commande ne sera juste pas appliqué si le fichier n'est pas zippé)
+
 ```{r}
 unzip ("data/school_closure.xlsx", exdir = "data/school_closure")
 ```
 
-
 Chargement du fichier
+
 ```{r}
 library(readxl)
 school_closure_xlsx <- read_xlsx("data/school_closure.xlsx")
 ```
 
 Conversion au format csv
+
 ```{r}
 school_closure_xlsx <- as.data.frame(school_closure_xlsx)
 write.csv(school_closure_xlsx, "data/school_closure.csv", row.names = FALSE)
 ```
 
 Suppression du fichier xlsx et chargement du fichier csv
+
 ```{r}
 file.remove("data/school_closure.xlsx")
 rm(school_closure_xlsx)
@@ -45,29 +52,34 @@ school_closure <- vroom("data/school_closure.csv")
 ```
 
 ### Chargement des bases PISA
-Les fichiers PISA ne sont pas téléchargeables directement depuis internet (error 403), nous avons ensuite de le faire par l'intermédiaire d'un drive ne ligne mais nous avons recontré le même type d'erreur. Et nous ne pouvons pas les mettre sur Git car ils sont trop volumineux (plusieurs Go).
-Par conséquent, nous nous en excusons mais nous allons mettre les instructions avec les liens nécessaires pour récupérer les fichiers ici. 
-les manipulations dans cette partie prennent beaucoup de temps (plusieurs minutes pour certaines) en raison de la taille des fichiers.
+
+Les fichiers PISA ne sont pas téléchargeables directement depuis internet (error 403), nous avons ensuite de le faire par l'intermédiaire d'un drive ne ligne mais nous avons recontré le même type d'erreur. Et nous ne pouvons pas les mettre sur Git car ils sont trop volumineux (plusieurs Go). Par conséquent, nous nous en excusons mais nous allons mettre les instructions avec les liens nécessaires pour récupérer les fichiers ici. les manipulations dans cette partie prennent beaucoup de temps (plusieurs minutes pour certaines) en raison de la taille des fichiers.
 
 #### PISA 2018 (Student Questionnaire)
+
 Téléchargement du fichier PISA 2018 depuis son lien internet: https://www.oecd.org/content/dam/oecd/en/data/datasets/pisa/pisa-2018-datasets/ssas-sps-data-files/SAS_STU_QQQ.zip
 
 Une fois le fichier téléchargé il faut le mettre dans le data directory (les fonctions interactives n'étant pas disponible sur Quarto il faut décommenter les ligne si dessous une fois sur R pour qu'elle fonctionne ou alors mettre manuellement le fichier zip dans le bon dossier)
+
 ```{r}
 ##file_path_2018 <- file.choose() ## ici il faut chosir le fichier ZIP PISA 2018 que vous venez de télécharger
 ##file.rename(file_path_2018, to = "data/PISA_2018.zip" )
 ```
+
 Si vous décidez de placer le fichier manuellement dans le data directory vous pouvez utiliser directement cette commande
+
 ```{r}
 file.rename(from = "data/SAS_STU_QQQ.zip", to = "data/PISA_2018.zip" )
 ```
 
 Maintenant que le fichier zippé est dans le data directory, on va le dézippé et le mettre au format csv
+
 ```{r, cache = FALSE}
 unzip("data/PISA_2018.zip", exdir="data/PISA_2018")
 ```
 
 On charge le fichier sas en séléctionnant seulement les colonnes qui nous intéresse (nous faisons ce tri au préalable pour ne pas utiliser trop de mémoire)
+
 ```{r, cache = FALSE}
 library(haven)
 colonnes_utiles <- c(
@@ -76,12 +88,15 @@ colonnes_utiles <- c(
 )
 PISA_2018_sas <- read_sas("data/PISA_2018/STU/cy07_msu_stu_qqq.sas7bdat", col_select = all_of(colonnes_utiles))
 ```
-on convertit le fichier au format csv pour des raisons de commodités 
+
+on convertit le fichier au format csv pour des raisons de commodités
+
 ```{r, cache = FALSE}
 write.csv(PISA_2018_sas, "data/PISA_2018.csv", row.names = FALSE)
 ```
 
 Suppression des fichiers inutiles et chargement du fichier csv
+
 ```{r}
 rm(PISA_2018_sas)
 ```
@@ -92,25 +107,31 @@ PISA_2018 <- vroom("data/PISA_2018.csv")
 ```
 
 #### PISA 2022 (Student Questionnaire)
+
 Téléchargement du fichier PISA 2022 depuis son lien internet: https://webfs.oecd.org/pisa2022/STU_QQQ_SAS.zip
 
 Une fois le fichier téléchargé il faut le mettre dans le data directory (les fonctions interactives n'étant pas disponible sur Quarto il faut décommenter les ligne si dessous une fois sur R pour qu'elle fonctionne ou alors mettre manuellement le fichier zip dans le bon dossier ie le data directory crée au départ)
+
 ```{r}
 ##file_path_2022 <- file.choose() ## ici il faut chosir le fichier ZIP PISA 2022 que vous venez de télécharger
 ##file.rename(file_path_2022, to = "data/PISA_2022.zip" )
 ```
+
 Si vous décidez de placer le fichier manuellement dans le data directory vous pouvez utiliser directement cette commande
+
 ```{r}
 file.rename(from = "data/STU_QQQ_SAS.zip", to = "data/PISA_2022.zip" )
 ```
 
 Maintenant que le fichier zippé est dans le data directory, on va le dézippé et le mettre au format csv
+
 ```{r, cache = FALSE}
 unzip("data/PISA_2022.zip", exdir="data/PISA_2022")
 library(haven)
 ```
 
 On charge le fichier sas en séléctionnant seulement les colonnes qui nous intéresse (nous faisons ce tri au préalable pour ne pas utiliser trop de mémoire)
+
 ```{r, cache = FALSE}
 library(haven)
 colonnes_utiles <- c(
@@ -121,12 +142,14 @@ PISA_2022_sas <- read_sas("data/PISA_2022/CY08MSP_STU_QQQ.SAS7BDAT", col_select 
 
 ```
 
-on convertit le fichier au format csv pour des raisons de commodités 
+on convertit le fichier au format csv pour des raisons de commodités
+
 ```{r, cache = FALSE}
 write.csv(PISA_2022_sas, "data/PISA_2022.csv", row.names = FALSE)
 ```
 
 Suppression des fichiers inutiles et chargement du fichier csv
+
 ```{r}
 rm(PISA_2022_sas)
 ```
@@ -136,80 +159,80 @@ library(vroom)
 PISA_2022 <- vroom("data/PISA_2022.csv")
 ```
 
-
 ## Description des données et des sources
 
-### Description des data sets PISA 
+### Description des data sets PISA
 
 récupérées au format SAS, converties au format csv
 
-Les tests PISA (Programme international pour le suivi des acquis des élèves), menés par l’OCDE tous les trois ans, collectent une grande variété de données pour évaluer les compétences des élèves et analyser les facteurs influençant les performances scolaires. Ils concernent les élèves des pays de l’OCDE (des économies avancées avec des systèmes éducatifs bien établis), mais aussi des pays partenaires (qui peuvent être des pays en développement), il y a donc une certaine diversité des contextes socio-économiques et culturels. 
+Les tests PISA (Programme international pour le suivi des acquis des élèves), menés par l'OCDE tous les trois ans, collectent une grande variété de données pour évaluer les compétences des élèves et analyser les facteurs influençant les performances scolaires. Ils concernent les élèves des pays de l'OCDE (des économies avancées avec des systèmes éducatifs bien établis), mais aussi des pays partenaires (qui peuvent être des pays en développement), il y a donc une certaine diversité des contextes socio-économiques et culturels.
 
-Ils mesurent trois domaines principaux : la lecture, les mathématiques et les sciences. 
+Ils mesurent trois domaines principaux : la lecture, les mathématiques et les sciences.
 
-En plus des tests, PISA collecte des données qualitatives via des questionnaires remplis par les élèves (sur leur contexte socio-économique, la motivation et les attitudes, les expériences scolaires), les chefs d’établissement (sur les caractéristiques de l’école, les ressources disponibles, et les pratiques et politiques éducatives) et les parents (sur leurs activités avec leur enfant, leur ambition pour leur enfant, et leurs idées politiques et sociales). Ces données permettent de comprendre les facteurs qui influencent les résultats scolaires.
+En plus des tests, PISA collecte des données qualitatives via des questionnaires remplis par les élèves (sur leur contexte socio-économique, la motivation et les attitudes, les expériences scolaires), les chefs d'établissement (sur les caractéristiques de l'école, les ressources disponibles, et les pratiques et politiques éducatives) et les parents (sur leurs activités avec leur enfant, leur ambition pour leur enfant, et leurs idées politiques et sociales). Ces données permettent de comprendre les facteurs qui influencent les résultats scolaires.
 
-Nos deux bases de données sont deux enquêtes PISA datant de 2018 et 2022 (soit respectivement avant et après la pandémie mondiale de 2020). 
+Nos deux bases de données sont deux enquêtes PISA datant de 2018 et 2022 (soit respectivement avant et après la pandémie mondiale de 2020).
 
-Ils contiennent les réponses données par les étudiants, et leurs parents au questionnaire, avec en plus leur performance au test), et précisent ainsi leur pays d’origine, leur âge, leur contexte socio-économique, mais aussi leur accès aux ressources informatiques. 
+Ils contiennent les réponses données par les étudiants, et leurs parents au questionnaire, avec en plus leur performance au test), et précisent ainsi leur pays d'origine, leur âge, leur contexte socio-économique, mais aussi leur accès aux ressources informatiques.
 
-Nous allons utiliser ces datasets pour voir le niveau des élèves avant la pandémie de COVID 19 en sélectionnant les questions d'intérêt et voir les différences qui existaient déjà entre les pays de l’OCDE avant la pandémie et le confinement. 
+Nous allons utiliser ces datasets pour voir le niveau des élèves avant la pandémie de COVID 19 en sélectionnant les questions d'intérêt et voir les différences qui existaient déjà entre les pays de l'OCDE avant la pandémie et le confinement.
 
+### description du dataset de l'UNESCO
 
-### description du dataset de l'UNESCO 
 récupérées au format xlsx, converties en csv
 
-Le nom entier de cette base de données est UNESCO_school_disclosures_database. 
+Le nom entier de cette base de données est UNESCO_school_disclosures_database.
 
-Le dataset nous donne par pays et par date le statut des établissements scolaires durant la pandémie (fermés, partiellement fermés ( temps partiel) ou ouvertes). Les données sont données du 16 février 2020 (soit 2 mois ½ après la découverte du premier cas en Chine, alors que la pandémie se diffuse dans le monde entier, provoquant de multiples confinements) au 31 mars 2022 (alors que la majorité des pays ont annoncé la fin des restrictions sanitaires majeures), soit une période globale de 2 ans et 6 semaines et donc 776 observations. 
+Le dataset nous donne par pays et par date le statut des établissements scolaires durant la pandémie (fermés, partiellement fermés ( temps partiel) ou ouvertes). Les données sont données du 16 février 2020 (soit 2 mois ½ après la découverte du premier cas en Chine, alors que la pandémie se diffuse dans le monde entier, provoquant de multiples confinements) au 31 mars 2022 (alors que la majorité des pays ont annoncé la fin des restrictions sanitaires majeures), soit une période globale de 2 ans et 6 semaines et donc 776 observations.
 
-La base de données a été formée par l’UNESCO afin d‘établir un suivi des fermetures des établissements scolaires causées par la pandémie de COVID-19 en 2020. L’UNESCO est une institution internationale de l’ONU qui a pour objectif de contribuer au maintien de la paix et de la sécurité en resserrant la collaboration entre nations, notamment par l'éducation. Elle a donc entrepris cette enquête afin de mettre en valeur l’ampleur de la perturbation de la pandémie sur l’éducation, d’identifier les groupes les plus vulnérables et d’orienter les actions des gouvernements et des ONG. 
+La base de données a été formée par l'UNESCO afin d'établir un suivi des fermetures des établissements scolaires causées par la pandémie de COVID-19 en 2020. L'UNESCO est une institution internationale de l'ONU qui a pour objectif de contribuer au maintien de la paix et de la sécurité en resserrant la collaboration entre nations, notamment par l'éducation. Elle a donc entrepris cette enquête afin de mettre en valeur l'ampleur de la perturbation de la pandémie sur l'éducation, d'identifier les groupes les plus vulnérables et d'orienter les actions des gouvernements et des ONG.
 
-La base de données est aussi intéressante puisqu’elle donne des informations sur les modalités d’apprentissage à distance, plus précisément si la radio, la télévision et l’apprentissage en ligne étaient accessibles, afin de préciser l’ampleur de l’interruption de l’apprentissage. 
+La base de données est aussi intéressante puisqu'elle donne des informations sur les modalités d'apprentissage à distance, plus précisément si la radio, la télévision et l'apprentissage en ligne étaient accessibles, afin de préciser l'ampleur de l'interruption de l'apprentissage.
 
-Elle précise aussi le stade de développement du pays (low, middle ou high income). 
+Elle précise aussi le stade de développement du pays (low, middle ou high income).
 
-En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours pendant lesquels les écoles ont été fermées par pays et ainsi comparer les évolutions des enquêtes PISA par rapport au nombre de jours durant lesquels les établissements scolaires ont été fermés durant la pandémie. 
-
-
-
+En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours pendant lesquels les écoles ont été fermées par pays et ainsi comparer les évolutions des enquêtes PISA par rapport au nombre de jours durant lesquels les établissements scolaires ont été fermés durant la pandémie.
 
 ## Informations basique sur les données brutes
 
-### Informations sur les données brutes de l'UNESCO 
+### Informations sur les données brutes de l'UNESCO
 
-```{r}
-nombre_lignes_unesco <- school_closure |> nrow()
-nombre_colonnes_unesco <- school_closure |> ncol()
-cat("Le fichier UNESCO contient", nombre_lignes_unesco, "lignes et", nombre_colonnes_unesco, "colonnes")
-```
+|                                               | Valeurs         |  
+|-----------------------------------------------|-----------------|
+| Nombre d'observations (nombre de lignes)      | r nrow(school_closure)     |  
+| Nombre de variables (nombre de colonne)       | r ncol(school_closure)     |
+| Nombre de pays considérés                     | r length(unique(school_closure$Country)) |
+| Période de temps considérée                   | r paste(range(school_closure$Date, na.rm = TRUE), collapse = " to ")|
 
 ### Informations sur les données brutes de PISA 2018
 
-```{r}
-nombre_lignes_PISA_2018 <- PISA_2018 |> nrow()
-nombre_colonnes_PISA_2018 <- PISA_2018 |> ncol()
-cat("Le fichier PISA 2018 contient", nombre_lignes_PISA_2018, "lignes et", nombre_colonnes_PISA_2018, "colonnes")
-```
+|                                          | Valeurs                           |
+|---------------------------------------|---------------------------------|
+| Nombre d'observations (nombre de lignes) | r nrow(PISA_2018)                 |
+| Nombre de variables (nombre de colonne)  | r ncol(PISA_2018)                 |
+| Nombre de pays considérés                | r length(unique((PISA_2018\$CNT)) |
+
+### Informations sur les données brutes de PISA 2022
+
+|                                          | Valeurs                           |
+|---------------------------------------|---------------------------------|
+| Nombre d'observations (nombre de lignes) | r nrow(PISA_2022)                 |
+| Nombre de variables (nombre de colonne)  | r ncol(PISA_2022)                 |
+| Nombre de pays considérés                | r length(unique((PISA_2022\$CNT)) |
 
 
-### Informations sur les données brutes de PISA 2022 
+## Nettoyage des données
 
-```{r}
-nombre_lignes_PISA_2022 <- PISA_2022 |> nrow()
-nombre_colonnes_PISA_2022 <- PISA_2022 |> ncol()
-cat("Le fichier PISA 2022 contient", nombre_lignes_PISA_2022, "lignes et", nombre_colonnes_PISA_2022, "colonnes")
-```
+### UNESCO
 
-
-## Nettoyage des données 
-### UNESCO 
 Installation des packages nécessaires
+
 ```{r}
 library(dplyr)
 ```
 
 Création d'une colonne indiquant le nombre de jours où les établissements scolaires ont été fermés ou partiellement fermés.
+
 ```{r}
 school_closure <- school_closure %>%
   mutate(closure_status_large = ifelse(Status == "Closed due to COVID-19" | Status == "Partially open", 1, 0)) %>%
@@ -218,6 +241,7 @@ school_closure <- school_closure %>%
 ```
 
 Création d'une colonne indiquant le nombre de jours où les établissements scolaires ont été fermés (on ne compte pas ici les jours où les établissements étaient partiellement fermés).
+
 ```{r}
 school_closure <- school_closure %>%
   mutate(closure_status_restricted = ifelse(Status == "Closed due to COVID-19", 1, 0)) %>%
@@ -226,6 +250,7 @@ school_closure <- school_closure %>%
 ```
 
 Regroupement des informations par pays pour préparer le datajoining
+
 ```{r}
 school_closure <- school_closure%>%
   select(Country, `Country ID`, `Region 3`, `Distance learning modalities (TV)`, `Distance learning modalities (Radio)`, `Distance learning modalities (Online)`, `Distance learning modalities (Global)`, closure_large_count, closure_restricted_count)%>%
@@ -233,6 +258,7 @@ school_closure <- school_closure%>%
 ```
 
 On renomme les variables pour préparer le data joining
+
 ```{r}
 school_closure<- school_closure%>%
   rename(CNT  = `Country ID`)
@@ -242,12 +268,12 @@ school_closure<- school_closure%>%
 
 Afin d'agréger les données PISA par pays et par discipline, nous suivons la méthode proposée par l'OCDE.
 
-NB : nous calculerons les moyennnes des valeurs plausibles des scores aux tests PISA. Les valeurs plausibles sont une technique statistique utilisée afin d'estimer les performances d'un élève à partir de tests standardisés tout en prenant en compte l'incertitude associée à ces estimations. C'est une estimation probabiliste du score, tirée d'une distribution statistique qui reflète les réponses de l'élève au test, les caractéristiques de l'élève et les propriétés psychométriques du test comme sa difficulté ou sa structure. Cela explique pourquoi chaque pays (la moyenne des élèves) n'a pas un seul score, mais plusieurs valeurs plausibles dont nous devrons ensuite déduire la moyenne. 
+NB : nous calculerons les moyennnes des valeurs plausibles des scores aux tests PISA. Les valeurs plausibles sont une technique statistique utilisée afin d'estimer les performances d'un élève à partir de tests standardisés tout en prenant en compte l'incertitude associée à ces estimations. C'est une estimation probabiliste du score, tirée d'une distribution statistique qui reflète les réponses de l'élève au test, les caractéristiques de l'élève et les propriétés psychométriques du test comme sa difficulté ou sa structure. Cela explique pourquoi chaque pays (la moyenne des élèves) n'a pas un seul score, mais plusieurs valeurs plausibles dont nous devrons ensuite déduire la moyenne.
 
-Nous devons utiliser des valeurs plausibles dans la mesure où les évaluations PISA sont basées sur des tests partiels. Chaque élève ne répond qu'à un sous-ensemble des questions disponibles et il n'est ainsi pas possible de calculer directement un "score vrai" pour chaque élève. 
-
+Nous devons utiliser des valeurs plausibles dans la mesure où les évaluations PISA sont basées sur des tests partiels. Chaque élève ne répond qu'à un sous-ensemble des questions disponibles et il n'est ainsi pas possible de calculer directement un "score vrai" pour chaque élève.
 
 ```{r}
+
 # Initialisation d'une liste pour stocker les résultats
 results_list <- list()
 
@@ -271,22 +297,41 @@ for (domain in domains) {
   }
 }
 
-# Combiner tous les résultats en un seul dataframe
+
+```
+
+
+```{r}
+ # Combiner tous les résultats en un seul dataframe
 PISA_2018_agregate <- do.call(rbind, results_list)
 
 # Transformer le dataframe pour calculer la moyenne par domaine et par pays
 PISA_2018_final <- PISA_2018_agregate %>%
-  select(CNT, Domain, PV, Mean) %>%  # Garder les colonnes nécessaires
+  select(CNT, Domain, PV, Mean, SD) %>%  # Garder les colonnes nécessaires
   group_by(CNT, Domain) %>%  # Grouper par pays et domaine
-  summarise(Mean_PV = mean(Mean, na.rm = TRUE), .groups = "drop") %>%  # Calculer la moyenne des PVs par domaine
-  pivot_wider(names_from = Domain, values_from = Mean_PV)  # Réorganiser pour avoir une colonne par domaine
-
+  summarise(
+    Mean_PV = mean(Mean, na.rm = TRUE),  # Calculer la moyenne des PVs
+    SD_PV = mean(SD, na.rm = TRUE),      # Calculer la moyenne de l'écart-type
+    .groups = "drop"                     # Retirer les groupes après le calcul
+  ) %>%
+  pivot_wider(names_from = Domain, values_from = c(Mean_PV, SD_PV))
 # Afficher le tableau final
 print(PISA_2018_final)
-
 ```
 
-### PISA 2022 
+On renomme les colonnes pour préparer le data joining.
+```{r}
+PISA_2018_final <- PISA_2018_final %>%
+  rename(
+    Mean_READ_2018 = Mean_PV_READ,
+    Mean_SCIE_2018 = Mean_PV_SCIE,
+    Mean_MATH_2018 = Mean_PV_MATH,
+    SD_MATH_2018 = SD_PV_MATH,
+    SD_SCIE_2018 = SD_PV_SCIE,
+    SD_READ_2018 = SD_PV_READ)
+```
+
+### PISA 2022
 
 ```{r}
 # Initialisation d'une liste pour stocker les résultats
@@ -316,7 +361,6 @@ for (domain in domains) {
 PISA_2022_agregate <- do.call(rbind, results_list)
 ```
 
-
 ```{r}
 # Transformer le dataframe pour calculer la moyenne par domaine et par pays
 PISA_2022_final <- PISA_2022_agregate %>%
@@ -331,6 +375,7 @@ PISA_2022_final <- PISA_2022_agregate %>%
 ```
 
 On renomme les colonnes pour préparer le data joining.
+
 ```{r}
 PISA_2022_final <- PISA_2022_final %>%
   rename(
@@ -343,50 +388,61 @@ PISA_2022_final <- PISA_2022_final %>%
   )
 ```
 
+<<<<<<< HEAD
 Affichage du dataframe
 ```{r}
 print(PISA_2022_final)
 ```
 
 
+=======
+>>>>>>> 22d054c33cdd203587e9995857f23e5ecae22c0f
 ## Informations basiques sur les données nettoyées
 
-### Unesco 
-```{r}
-nombre_lignes_unesco_clean <- school_closure |> nrow()
-nombre_colonnes_unesco_clean <- school_closure |> ncol()
-cat("Le fichier UNESCO nettoyé contient", nombre_lignes_unesco_clean, "lignes et", nombre_colonnes_unesco_clean, "colonnes")
-```
+### Unesco
+
+|                                               | Valeurs         |  
+|-----------------------------------------------|-----------------|
+| Nombre d'observations (nombre de lignes)      | r nrow(school_closure)     |  
+| Nombre de variables (nombre de colonne)       | r ncol(school_closure)     |
+
 
 ### PISA 2018
 
-```{r}
-nombre_lignes_PISA_2018_clean <- PISA_2018_final |> nrow()
-nombre_colonnes_PISA_2018_clean <- PISA_2018_final |> ncol()
-cat("Le fichier PISA 2018 nettoyé contient", nombre_lignes_PISA_2018_clean, "lignes et", nombre_colonnes_PISA_2018_clean, "colonnes")
-```
+|                                               | Valeurs         |  
+|-----------------------------------------------|-----------------|
+| Nombre d'observations (nombre de lignes)      | r nrow(PISA_2018_final)     |  
+| Nombre de variables (nombre de colonne)       | r ncol(PISA_2018_final)     |
 
-### PISA 2022 
+### PISA 2022
 
-```{r}
-nombre_lignes_PISA_2022_clean <- PISA_2022_final |> nrow()
-nombre_colonnes_PISA_2022_clean <- PISA_2022_final |> ncol()
-cat("Le fichier PISA 2022 nettoyé contient", nombre_lignes_PISA_2022_clean, "lignes et", nombre_colonnes_PISA_2022_clean, "colonnes")
-```
-## Data joining 
+|                                               | Valeurs         |  
+|-----------------------------------------------|-----------------|
+| Nombre d'observations (nombre de lignes)      | r nrow(PISA_2022_final)     |  
+| Nombre de variables (nombre de colonne)       | r ncol(PISA_2022_final)     |
+
+## Data joining
+
 ### Data joining des datasets PISA
 
+<<<<<<< HEAD
 On commence par joindre les datasets PISA 2018 et 2022.
+=======
+On commence par joindre les datasets PISA 2018 et 2022
+
+>>>>>>> 22d054c33cdd203587e9995857f23e5ecae22c0f
 ```{r}
 PISA <- left_join(PISA_2018_final, PISA_2022_final, by = "CNT")
 ```
 Le dataframe PISA contient seulement 71 pays en raison des 9 pays qui sont dans le dataframe de 2018 mais pas dans celui de 2022.
 
 On joint le dataset PISA qu'on vient de créer avec celui de l'UNESCO eb utilisant l'identifiant commun `CNT`.
+
 ```{r}
 df_final<-left_join(PISA, school_closure, by = "CNT")
 ```
 
+<<<<<<< HEAD
 Affichage du dataframe final qui sera utilisé pour l'analyse: 
 ```{r}
 knitr::kable(df_final, caption = "Dataframe utilisé pour l'analyse")
@@ -405,33 +461,36 @@ Pour étudier l'impact de la crise du covid nous avons regarder le nombre de jou
 Cette variable nous indique quelles sont les modalités d'étude à distance qui ont été mise en place par le pays (radio, télé ou internet). Cela nous permettra de voir si le gestion de l'enseignement à distance a eu un impact sur le niveau des élèves.
 
 ## Description de la question de recherche 
+=======
+## Description des variables importantes
 
-### La génération Covid : les impacts de la crise sanitaire en termes d’éducation à l’échelle internationale
+## Description de la question de recherche
+>>>>>>> 22d054c33cdd203587e9995857f23e5ecae22c0f
 
+### La génération Covid : les impacts de la crise sanitaire en termes d'éducation à l'échelle internationale
 
-La différence de temps de fermeture des établissements scolaires entre les pays à cause de la pandémie de la Covid-19 a-t-elle affaibli les performances scolaires d’une part, et aggravé les inégalités scolaires d’autre part ?
+La différence de temps de fermeture des établissements scolaires entre les pays à cause de la pandémie de la Covid-19 a-t-elle affaibli les performances scolaires d'une part, et aggravé les inégalités scolaires d'autre part ?
 
-#### une source d'inégalités générationnelles ? 
+#### une source d'inégalités générationnelles ?
 
-Avec Adèle, nous nous sommes posés la question lorsque nous nous sommes rendues compte que, toutes les deux, nos professeurs liaient les mauvaises performances scolaires de notre génération, en comparaison aux précédentes générations, à la pandémie de la Covid-19 et à la fermeture des écoles, nous appelant ainsi la “génération Covid”. Alors que ces remarques résonnaient de manière particulièrement déterministe, nous avions à coeur de vérifier si parler de “génération Covid” comme d’une génération qui a un capital humain inférieur aux autres générations était pertinent. 
+Avec Adèle, nous nous sommes posés la question lorsque nous nous sommes rendues compte que, toutes les deux, nos professeurs liaient les mauvaises performances scolaires de notre génération, en comparaison aux précédentes générations, à la pandémie de la Covid-19 et à la fermeture des écoles, nous appelant ainsi la "génération Covid". Alors que ces remarques résonnaient de manière particulièrement déterministe, nous avions à coeur de vérifier si parler de "génération Covid" comme d'une génération qui a un capital humain inférieur aux autres générations était pertinent.
 
-Mettre en valeur une corrélation entre fermeture des établissements scolaires et baisse des performances scolaires nous permettrait de tirer deux conclusions principales. Premièrement, elle permettrait de conclure à un rôle important de l’école dans la transmission des connaissances par rapport au distanciel, malgré ses nombreux outils innovants en termes d'apprentissage. De plus, une mise en valeur d’un déficit de capital humain associé à une génération pourrait éventuellement entraîner un manque de compétitivité associé à la génération sur le marché du travail. 
+Mettre en valeur une corrélation entre fermeture des établissements scolaires et baisse des performances scolaires nous permettrait de tirer deux conclusions principales. Premièrement, elle permettrait de conclure à un rôle important de l'école dans la transmission des connaissances par rapport au distanciel, malgré ses nombreux outils innovants en termes d'apprentissage. De plus, une mise en valeur d'un déficit de capital humain associé à une génération pourrait éventuellement entraîner un manque de compétitivité associé à la génération sur le marché du travail.
 
-La pandémie étant seulement récente de 5 ans, il pourrait être intéressant dans quelques années de chercher à déterminer quelle génération aura subi le plus de la pandémie en termes de performances scolaires : la nôtre, qui avons subi la pandémie pendant la fin du lycée et qui donc avons quelques faiblesses dans des connaissances assez spécifiques et fines; ou bien des générations plus jeunes, qui ont subi la pandémie pendant leur primaire, c’est-à-dire pendant les apprentissages de base. 
+La pandémie étant seulement récente de 5 ans, il pourrait être intéressant dans quelques années de chercher à déterminer quelle génération aura subi le plus de la pandémie en termes de performances scolaires : la nôtre, qui avons subi la pandémie pendant la fin du lycée et qui donc avons quelques faiblesses dans des connaissances assez spécifiques et fines; ou bien des générations plus jeunes, qui ont subi la pandémie pendant leur primaire, c'est-à-dire pendant les apprentissages de base.
 
+#### Une source d'inégalités sociales ?
 
-#### Une source d'inégalités sociales ? 
-Au-delà d’une inégalité générationnelle, notre enquête recherche aussi une inégalité sociale dans l’expérience de la fermeture des établissements scolaires. 
+Au-delà d'une inégalité générationnelle, notre enquête recherche aussi une inégalité sociale dans l'expérience de la fermeture des établissements scolaires.
 
-La fermeture des établissements étant décidée à l’échelle nationale, d’une part il sera intéressant de chercher une corrélation entre le niveau de développement du pays et le temps de fermeture des établissements pour conclure à un impact différencié de la crise sanitaire en termes de niveau de développement des pays. De plus, des données sur l’accès aux technologies numériques des pays nous permettront de chercher une corrélation entre accès faible et baisse des performances scolaires. 
+La fermeture des établissements étant décidée à l'échelle nationale, d'une part il sera intéressant de chercher une corrélation entre le niveau de développement du pays et le temps de fermeture des établissements pour conclure à un impact différencié de la crise sanitaire en termes de niveau de développement des pays. De plus, des données sur l'accès aux technologies numériques des pays nous permettront de chercher une corrélation entre accès faible et baisse des performances scolaires.
 
-Dans une dernière partie, nous aimerions nous concentrer sur le cas français pour nuancer un impact généralisé de la crise sanitaire et mettre en avant des inégalités sociales en termes d’accès au numérique entre élèves d’un même pays. 
+Dans une dernière partie, nous aimerions nous concentrer sur le cas français pour nuancer un impact généralisé de la crise sanitaire et mettre en avant des inégalités sociales en termes d'accès au numérique entre élèves d'un même pays.
 
-Une mise en valeur des inégalités sociales dans l’enseignement à distance permettrait aussi de conclure à un rôle essentiel de l’école, dans la réduction des inégalités entre les élèves issus de milieux socio-économiques différents. 
+Une mise en valeur des inégalités sociales dans l'enseignement à distance permettrait aussi de conclure à un rôle essentiel de l'école, dans la réduction des inégalités entre les élèves issus de milieux socio-économiques différents.
 
 #### Conclusion
-Ainsi, grâce aux données de l'UNESCO et de l’OCDE, notre projet ambitionne de mettre en lumière l'impact de la pandémie sur les performances scolaires et de potentielles inégalités générationnelles et sociales augmentées. Nos conclusions nous permettront de fournir des recommandations concrètes pour guider les décideurs politiques dans la mise en œuvre de politiques éducatives plus inclusives et résilientes face à de futures crises. 
 
+Ainsi, grâce aux données de l'UNESCO et de l'OCDE, notre projet ambitionne de mettre en lumière l'impact de la pandémie sur les performances scolaires et de potentielles inégalités générationnelles et sociales augmentées. Nos conclusions nous permettront de fournir des recommandations concrètes pour guider les décideurs politiques dans la mise en œuvre de politiques éducatives plus inclusives et résilientes face à de futures crises.
 
-
-## Graphical representation of the main variables 
+## Graphical representation of the main variables
