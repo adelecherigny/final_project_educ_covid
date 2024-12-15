@@ -320,22 +320,32 @@ PISA_2022_agregate <- do.call(rbind, results_list)
 ```{r}
 # Transformer le dataframe pour calculer la moyenne par domaine et par pays
 PISA_2022_final <- PISA_2022_agregate %>%
-  select(CNT, Domain, PV, Mean) %>%  # Garder les colonnes nécessaires
+  select(CNT, Domain, PV, Mean, SD) %>%  # Garder les colonnes nécessaires
   group_by(CNT, Domain) %>%  # Grouper par pays et domaine
-  summarise(Mean_PV = mean(Mean, na.rm = TRUE), .groups = "drop") %>%  # Calculer la moyenne des PVs par domaine
-  pivot_wider(names_from = Domain, values_from = Mean_PV)  # Réorganiser pour avoir une colonne par domaine
-
-# Afficher le tableau final
-print(PISA_2022_final)
+  summarise(
+    Mean_PV = mean(Mean, na.rm = TRUE),  # Calculer la moyenne des PVs
+    SD_PV = mean(SD, na.rm = TRUE),      # Calculer la moyenne de l'écart-type
+    .groups = "drop"                     # Retirer les groupes après le calcul
+  ) %>% 
+  pivot_wider(names_from = Domain, values_from = c(Mean_PV, SD_PV)) 
 ```
+
 On renomme les colonnes pour préparer le data joining.
 ```{r}
 PISA_2022_final <- PISA_2022_final %>%
   rename(
-    READ_2022 = READ,
-    SCIE_2022 = SCIE,
-    MATH_2022 = MATH
+    Mean_READ_2022 = Mean_PV_READ,
+    Mean_SCIE_2022 = Mean_PV_SCIE,
+    Mean_MATH_2022 = Mean_PV_MATH, 
+    SD_MATH_2022 = SD_PV_MATH, 
+    SD_SCIE_2022 = SD_PV_SCIE,
+    SD_READ_2022 = SD_PV_READ
   )
+```
+
+Affichage du dataframe
+```{r}
+print(PISA_2022_final)
 ```
 
 
