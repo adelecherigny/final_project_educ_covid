@@ -388,15 +388,13 @@ PISA_2022_final <- PISA_2022_final %>%
   )
 ```
 
-<<<<<<< HEAD
+ 
 Affichage du dataframe
 ```{r}
 print(PISA_2022_final)
 ```
 
-
-=======
->>>>>>> 22d054c33cdd203587e9995857f23e5ecae22c0f
+ 
 ## Informations basiques sur les données nettoyées
 
 ### Unesco
@@ -425,12 +423,8 @@ print(PISA_2022_final)
 
 ### Data joining des datasets PISA
 
-<<<<<<< HEAD
-On commence par joindre les datasets PISA 2018 et 2022.
-=======
 On commence par joindre les datasets PISA 2018 et 2022
 
->>>>>>> 22d054c33cdd203587e9995857f23e5ecae22c0f
 ```{r}
 PISA <- left_join(PISA_2018_final, PISA_2022_final, by = "CNT")
 ```
@@ -442,7 +436,7 @@ On joint le dataset PISA qu'on vient de créer avec celui de l'UNESCO eb utilisa
 df_final<-left_join(PISA, school_closure, by = "CNT")
 ```
 
-<<<<<<< HEAD
+
 Affichage du dataframe final qui sera utilisé pour l'analyse: 
 ```{r}
 knitr::kable(df_final, caption = "Dataframe utilisé pour l'analyse")
@@ -460,13 +454,9 @@ Pour étudier l'impact de la crise du covid nous avons regarder le nombre de jou
 ### Modalités d'étude à distance
 Cette variable nous indique quelles sont les modalités d'étude à distance qui ont été mise en place par le pays (radio, télé ou internet). Cela nous permettra de voir si le gestion de l'enseignement à distance a eu un impact sur le niveau des élèves.
 
-## Description de la question de recherche 
-=======
-## Description des variables importantes
 
 ## Description de la question de recherche
->>>>>>> 22d054c33cdd203587e9995857f23e5ecae22c0f
-
+ 
 ### La génération Covid : les impacts de la crise sanitaire en termes d'éducation à l'échelle internationale
 
 La différence de temps de fermeture des établissements scolaires entre les pays à cause de la pandémie de la Covid-19 a-t-elle affaibli les performances scolaires d'une part, et aggravé les inégalités scolaires d'autre part ?
