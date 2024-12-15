@@ -3,6 +3,15 @@ title: "final project educ covid"
 format: html
 editor: visual
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,        # Afficher le code dans le rendu
+  warning = FALSE,    # Ne pas afficher les warnings
+  message = FALSE,    # Ne pas afficher les messages
+  cache = FALSE       # Désactiver le cache
+)
+```
+
 
 ## lien Github et sources des données
 
