@@ -376,14 +376,20 @@ cat("Le fichier PISA 2022 nettoyé contient", nombre_lignes_PISA_2022_clean, "li
 ## Data joining 
 ### Data joining des datasets PISA
 
-On commence par joindre les datasets PISA 2018 et 2022
+On commence par joindre les datasets PISA 2018 et 2022.
 ```{r}
-PISA <- merge(PISA_2018_final, PISA_2022_final, by = "CNT")
+PISA <- left_join(PISA_2018_final, PISA_2022_final, by = "CNT")
 ```
+Le dataframe PISA contient seulement 71 pays en raison des 9 pays qui sont dans le dataframe de 2018 mais pas dans celui de 2022.
 
 On joint le dataset PISA qu'on vient de créer avec celui de l'UNESCO eb utilisant l'identifiant commun `CNT`.
 ```{r}
 df_final<-left_join(PISA, school_closure, by = "CNT")
+```
+
+Affichage du dataframe final qui sera utilisé pour l'analyse: 
+```{r}
+knitr::kable(df_final, caption = "Dataframe utilisé pour l'analyse")
 ```
 
 
