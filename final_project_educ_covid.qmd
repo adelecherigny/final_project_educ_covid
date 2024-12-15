@@ -210,7 +210,7 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 |---------------------------------------|---------------------------------|
 | Nombre d'observations (nombre de lignes) | r nrow(PISA_2018)                 |
 | Nombre de variables (nombre de colonne)  | r ncol(PISA_2018)                 |
-| Nombre de pays considérés                | r length(unique((PISA-2018\$CNT)) |
+| Nombre de pays considérés                | r length(unique((PISA_2018\$CNT)) |
 
 ### Informations sur les données brutes de PISA 2022
 
@@ -218,7 +218,7 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 |---------------------------------------|---------------------------------|
 | Nombre d'observations (nombre de lignes) | r nrow(PISA_2022)                 |
 | Nombre de variables (nombre de colonne)  | r ncol(PISA_2022)                 |
-| Nombre de pays considérés                | r length(unique((PISA-2022\$CNT)) |
+| Nombre de pays considérés                | r length(unique((PISA_2022\$CNT)) |
 
 
 ## Nettoyage des données
