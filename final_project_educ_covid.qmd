@@ -378,6 +378,15 @@ df_final<-left_join(PISA, school_closure, by = "CNT")
 
 
 ## Description des variables importantes 
+### Les moyennes des scores plausibles des élèves
+Pour analyser l'évolution du niveau des élèves nous avons utilisé les plausibles values des enquêtes PISA. Comme expliqué plus haut ces plausibles values sont des scores "plausibles" que les élèves qui ont répondu au questionnaire auraient pu obtenir. 
+Il y a dix valeurs plausibles pour chaque matières (ici nous avons sélectionné les maths, les sciences et la lecture) et pour chaque matière nous avons fait la moyenne des valeurs plausibles par pays. Cela nous donne donc une indication du niveau des élèves de 15ans pour un pays donné. Plus la moyenne d'un pays est élevée plus cela signifie que le pays a obtenu des bons résultats.
+
+### Les fermetures d'établissement scolaires 
+Pour étudier l'impact de la crise du covid nous avons regarder le nombre de jours où les écoles ont été fermées ou partiellement fermées durant la période de la crise. Ces variables (large et restricted) nous indique pour chaque pays le nombre de jours de fermeture.
+
+### Modalités d'étude à distance
+Cette variable nous indique quelles sont les modalités d'étude à distance qui ont été mise en place par le pays (radio, télé ou internet). Cela nous permettra de voir si le gestion de l'enseignement à distance a eu un impact sur le niveau des élèves.
 
 ## Description de la question de recherche 
 
