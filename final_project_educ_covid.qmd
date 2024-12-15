@@ -219,7 +219,7 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 |---------------------------------------|---------------------------------|
 | Nombre d'observations (nombre de lignes) | `r nrow(PISA_2018)`                 |
 | Nombre de variables (nombre de colonne)  | `r ncol(PISA_2018)`                 |
-| Nombre de pays considérés                | `r length(unique((PISA_2018\$CNT))` |
+| Nombre de pays considérés                | `r length(unique(PISA_2018$CNT))` |
 
 ### Informations sur les données brutes de PISA 2022
 
@@ -227,7 +227,7 @@ En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours p
 |---------------------------------------|---------------------------------|
 | Nombre d'observations (nombre de lignes) | `r nrow(PISA_2022)`                 |
 | Nombre de variables (nombre de colonne)  | `r ncol(PISA_2022)`                 |
-| Nombre de pays considérés                | `r length(unique((PISA_2022\$CNT))` |
+| Nombre de pays considérés                | `r length(unique(PISA_2022$CNT))` |
 
 
 ## Nettoyage des données
@@ -435,14 +435,20 @@ print(PISA_2022_final)
 On commence par joindre les datasets PISA 2018 et 2022
 
 ```{r}
-PISA <- left_join(PISA_2018_final, PISA_2022_final, by = "CNT")
+PISA <- inner_join(PISA_2018_final, PISA_2022_final, by = "CNT")
 ```
 Le dataframe PISA contient seulement 71 pays en raison des 9 pays qui sont dans le dataframe de 2018 mais pas dans celui de 2022.
+
+On enlève le Vietnam car les valeurs de l'enquête PISA 2018 ne sont pas analysables 
+```{r}
+PISA <- PISA %>%
+  filter(CNT != "VNM")
+```
 
 On joint le dataset PISA qu'on vient de créer avec celui de l'UNESCO eb utilisant l'identifiant commun `CNT`.
 
 ```{r}
-df_final<-left_join(PISA, school_closure, by = "CNT")
+df_final<-inner_join(PISA, school_closure, by = "CNT")
 ```
 
 
