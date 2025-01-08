@@ -662,6 +662,7 @@ df_final%>%
   geom_bar()
 ```
 ## Création de variables indicatrices pour l'analyse
+### Niveau de revenu
 Création de la variable indicatrice pour le niveau de richesse. Compte tenu des effectifs de chaque catégorie nous avons décidé de créer une variable indicatrice qui prenait la valeur 1 si le pays était identifié comme "High income" et la valeur 0 sinon afin d'avoir des catégories à peu près équilibrée pour l'analyse que nous allons mener dans la phase finale. 
 
 ```{r}
@@ -675,4 +676,39 @@ df_final <- df_final %>%
   ))
 ```
 
+### Modalités d'étude à distance 
+Pour chacune des modalités on va remplacer les réponses Yes par des 1 et les réponses No par 0.
+#### TV
+```{r}
+df_final <- df_final %>%
+  mutate(TV = case_when(
+    `Distance learning modalities (TV)` == "Yes" ~ 1,
+    TRUE ~ 0
+  ))
+```
+
+#### Radio
+```{r}
+df_final <- df_final %>%
+  mutate(Radio = case_when(
+    `Distance learning modalities (Radio)` == "Yes" ~ 1,
+    TRUE ~ 0
+  ))
+```
+
+
+#### Online
+```{r}
+df_final <- df_final %>%
+  mutate(Online = case_when(
+    `Distance learning modalities (Online)` == "Yes" ~ 1,
+    TRUE ~ 0
+  ))
+```
+
+On supprime ensuite les colonnes caractères qui ne nous seront plus utiles
+```{r}
+df_final<- df_final%>%
+  select(-`Distance learning modalities (TV)`, -`Distance learning modalities (Radio)`, -`Distance learning modalities (Online)`)
+```
 
