@@ -661,6 +661,18 @@ df_final%>%
   ggplot(aes(x= `Distance learning modalities (Global)`, fill = `Region 3`))+
   geom_bar()
 ```
+## Création de variables indicatrices pour l'analyse
+Création de la variable indicatrice pour le niveau de richesse. Compte tenu des effectifs de chaque catégorie nous avons décidé de créer une variable indicatrice qui prenait la valeur 1 si le pays était identifié comme "High income" et la valeur 0 sinon afin d'avoir des catégories à peu près équilibrée pour l'analyse que nous allons mener dans la phase finale. 
+
 ```{r}
+library(dplyr)
+
+# Utilisation de mutate et case_when pour créer la variable binaire
+df_final <- df_final %>%
+  mutate(income_status = case_when(
+    `Region 3` == "WB: High income" ~ 1,
+    TRUE ~ 0
+  ))
 ```
+
 
