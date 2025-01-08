@@ -5,6 +5,30 @@ format: pdf
 
 # research question presentation
 
+## La génération Covid : les impacts de la crise sanitaire en termes d'éducation à l'échelle internationale
+
+La différence de temps de fermeture des établissements scolaires entre les pays à cause de la pandémie de la Covid-19 a-t-elle affaibli les performances scolaires d'une part, et aggravé les inégalités scolaires d'autre part ?
+
+## une source d'inégalités générationnelles ?
+
+Avec Adèle, nous nous sommes posés la question lorsque nous nous sommes rendues compte que, toutes les deux, nos professeurs liaient les mauvaises performances scolaires de notre génération, en comparaison aux précédentes générations, à la pandémie de la Covid-19 et à la fermeture des écoles, nous appelant ainsi la "génération Covid". Alors que ces remarques résonnaient de manière particulièrement déterministe, nous avions à coeur de vérifier si parler de "génération Covid" comme d'une génération qui a un capital humain inférieur aux autres générations était pertinent.
+
+Mettre en valeur une corrélation entre fermeture des établissements scolaires et baisse des performances scolaires nous permettrait de tirer deux conclusions principales. Premièrement, elle permettrait de conclure à un rôle important de l'école dans la transmission des connaissances par rapport au distanciel, malgré ses nombreux outils innovants en termes d'apprentissage. De plus, une mise en valeur d'un déficit de capital humain associé à une génération pourrait éventuellement entraîner un manque de compétitivité associé à la génération sur le marché du travail.
+
+La pandémie étant seulement récente de 5 ans, il pourrait être intéressant dans quelques années de chercher à déterminer quelle génération aura subi le plus de la pandémie en termes de performances scolaires : la nôtre, qui avons subi la pandémie pendant la fin du lycée et qui donc avons quelques faiblesses dans des connaissances assez spécifiques et fines; ou bien des générations plus jeunes, qui ont subi la pandémie pendant leur primaire, c'est-à-dire pendant les apprentissages de base.
+
+## Une source d'inégalités sociales ?
+
+Au-delà d'une inégalité générationnelle, notre enquête recherche aussi une inégalité sociale dans l'expérience de la fermeture des établissements scolaires.
+
+La fermeture des établissements étant décidée à l'échelle nationale, d'une part il sera intéressant de chercher une corrélation entre le niveau de développement du pays et le temps de fermeture des établissements pour conclure à un impact différencié de la crise sanitaire en termes de niveau de développement des pays. De plus, il aurait été intéressant d’utiliser des données sur l'accès aux technologies numériques des pays afin de chercher une corrélation entre accès faible et baisse des performances scolaires. Malheureusement, dans notre base de données, tous les pays sont déclarés comme ayant accès à internet, les seules différences entre eux étant l’accès à la télévision et à la radio, ce qui est moins pertinent pour étudier l’adaptation de l’éducation à distance. 
+Une mise en valeur des inégalités sociales dans l'enseignement à distance permettrait aussi de conclure à un rôle essentiel de l'école, dans la réduction des inégalités entre les élèves issus de milieux socio-économiques différents.
+
+## Conclusion
+
+Ainsi, grâce aux données de l'UNESCO et de l'OCDE, notre projet ambitionne de mettre en lumière l'impact de la pandémie sur les performances scolaires et de potentielles inégalités générationnelles et sociales augmentées. Nos conclusions nous permettront de fournir des recommandations concrètes pour guider les décideurs politiques dans la mise en œuvre de politiques éducatives plus inclusives et résilientes face à de futures crises.
+
+
 # very brief data sets descriptions
 
 # data analysis including visual representations, tests, model fitting
