@@ -31,6 +31,57 @@ Ainsi, grâce aux données de l'UNESCO et de l'OCDE, notre projet ambitionne de 
 
 # very brief data sets descriptions
 
+## Description des data sets PISA
+
+récupérées au format SAS, converties au format csv
+
+Les tests PISA (Programme international pour le suivi des acquis des élèves), menés par l'OCDE tous les trois ans, collectent une grande variété de données pour évaluer les compétences des élèves et analyser les facteurs influençant les performances scolaires. Ils concernent les élèves des pays de l'OCDE (des économies avancées avec des systèmes éducatifs bien établis), mais aussi des pays partenaires (qui peuvent être des pays en développement), il y a donc une certaine diversité des contextes socio-économiques et culturels.
+
+Ils mesurent trois domaines principaux : la lecture, les mathématiques et les sciences.
+
+En plus des tests, PISA collecte des données qualitatives via des questionnaires remplis par les élèves (sur leur contexte socio-économique, la motivation et les attitudes, les expériences scolaires), les chefs d'établissement (sur les caractéristiques de l'école, les ressources disponibles, et les pratiques et politiques éducatives) et les parents (sur leurs activités avec leur enfant, leur ambition pour leur enfant, et leurs idées politiques et sociales). Ces données permettent de comprendre les facteurs qui influencent les résultats scolaires. Cependant, à cause de la taille des fichiers, nous avons dû supprimer ces informations. 
+
+Nos deux bases de données sont deux enquêtes PISA datant de 2018 et 2022 (soit respectivement avant et après la pandémie mondiale de 2020).
+
+Nous allons utiliser ces datasets pour voir le niveau des élèves avant la pandémie de COVID 19 en sélectionnant les questions d'intérêt et voir les différences qui existaient déjà entre les pays de l'OCDE avant la pandémie et le confinement.
+
+Afin d'agréger les données PISA par pays et par discipline, nous avons suivi la méthode proposée par l'OCDE, qui consiste à calculer les moyennes des valeurs plausibles des scores aux tests PISA pour estimer les performances d'un élève à partir de tests standardisés tout en prenant en compte l'incertitude associée à ces estimations. Nous avons dû utiliser des valeurs plausibles dans la mesure où les évaluations PISA sont basées sur des tests partiels. Chaque élève ne répond qu'à un sous-ensemble des questions disponibles et il n'est ainsi pas possible de calculer directement un "score vrai" pour chaque élève.
+
+
+## description du dataset de l'UNESCO
+
+récupérées au format xlsx, converties en csv
+
+Le nom entier de cette base de données est UNESCO_school_disclosures_database.
+
+Le dataset nous donne par pays et par date le statut des établissements scolaires durant la pandémie (fermés, partiellement fermés ( temps partiel) ou ouvertes). Les données sont données du 16 février 2020 (soit 2 mois ½ après la découverte du premier cas en Chine, alors que la pandémie se diffuse dans le monde entier, provoquant de multiples confinements) au 31 mars 2022 (alors que la majorité des pays ont annoncé la fin des restrictions sanitaires majeures), soit une période globale de 2 ans et 6 semaines et donc 776 observations.
+
+La base de données a été formée par l'UNESCO afin d'établir un suivi des fermetures des établissements scolaires causées par la pandémie de COVID-19 en 2020. L'UNESCO est une institution internationale de l'ONU qui a pour objectif de contribuer au maintien de la paix et de la sécurité en resserrant la collaboration entre nations, notamment par l'éducation. Elle a donc entrepris cette enquête afin de mettre en valeur l'ampleur de la perturbation de la pandémie sur l'éducation, d'identifier les groupes les plus vulnérables et d'orienter les actions des gouvernements et des ONG.
+
+La base de données est aussi intéressante puisqu'elle donne des informations sur les modalités d'apprentissage à distance, plus précisément si la radio, la télévision et l'apprentissage en ligne étaient accessibles, afin de préciser l'ampleur de l'interruption de l'apprentissage.
+
+Elle précise aussi le stade de développement du pays (high, higher middle et lower middle income). Dans la mesure où il n’y a qu’un faible nombre de pays avec un lower middle income, nous allons regrouper au sein d’une même catégorie les lower et higher middle income. 
+
+En agrégeant ces données, nous allons pouvoir avoir le nombre total de jours pendant lesquels les écoles ont été fermées par pays et ainsi comparer les évolutions des enquêtes PISA par rapport au nombre de jours durant lesquels les établissements scolaires ont été fermés durant la pandémie.
+
+
+## Description des variables importantes 
+
+Il y a 3 variables importantes.
+
+### Les moyennes des scores plausibles des élèves
+Elles nous donnent une indication du niveau des élèves de 15ans pour un pays donné. Plus la moyenne d'un pays est élevée plus cela signifie que le pays a obtenu des bons résultats.
+
+### Les écarts types des scores plausibles par pays
+Les écarts types nous renseignent sur l'homogénéité du niveau des élèves dans un pays. Plus l'écart type est élevé plus cela signifie que les résultats des élèves sont hétérogènes. Ainsi les écarts types peuvent renseigner sur les inégalités scolaires qui peuvent se manifester par des différences de niveau au sein d'un pays. 
+Leur comparaison permet aussi de voir si le covid a engendré plus ou moins d'inégalités selon les pays. 
+
+### Les fermetures d'établissement scolaires 
+Pour étudier l'impact de la crise du covid nous avons regardé le nombre de jours où les écoles ont été fermées ou partiellement fermées durant la période de la crise. Ces variables (large et restricted) nous indiquent pour chaque pays le nombre de jours de fermeture.
+
+
+
+
 # data analysis including visual representations, tests, model fitting
 
 ## analyse de l'évolution du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
