@@ -712,3 +712,8 @@ df_final<- df_final%>%
   select(-`Distance learning modalities (TV)`, -`Distance learning modalities (Radio)`, -`Distance learning modalities (Online)`)
 ```
 
+## Sauvegarde du fichier final
+```{r}
+write.csv(df_final, "data/df_final.csv", row.names = FALSE)
+```
+
