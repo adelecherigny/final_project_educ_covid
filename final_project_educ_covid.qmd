@@ -28,7 +28,10 @@ data_dir <- dir.create("data")
 Téléchargement du fichier depuis internet grâce au lien:
 
 ```{r}
-download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/05/UNESCO_school_closures_database.xlsx", destfile = "data/school_closure.xlsx")
+if (!file.exists("data/school_closure.xlsx")) {
+  download.file("https://covid19.uis.unesco.org/wp-content/uploads/sites/11/2021/05/UNESCO_school_closures_database.xlsx", 
+                destfile = "data/school_closure.xlsx")
+}
 ```
 
 Selon certains navigateurs il se peut que le fichier soit zippé, si c'est le cas il faut effectuer la commande suivante (sinon vous pouvez quand même lancer le code cette commande ne sera juste pas appliqué si le fichier n'est pas zippé)
@@ -48,7 +51,9 @@ Conversion au format csv
 
 ```{r}
 school_closure_xlsx <- as.data.frame(school_closure_xlsx)
-write.csv(school_closure_xlsx, "data/school_closure.csv", row.names = FALSE)
+if (!file.exists("data/school_closure.csv")) {
+  write.csv(school_closure_xlsx, "data/school_closure.csv", row.names = FALSE)
+}
 ```
 
 Suppression du fichier xlsx et chargement du fichier csv
@@ -56,6 +61,10 @@ Suppression du fichier xlsx et chargement du fichier csv
 ```{r}
 file.remove("data/school_closure.xlsx")
 rm(school_closure_xlsx)
+```
+
+
+```{r}
 library(vroom)
 school_closure <- vroom("data/school_closure.csv")
 ```
@@ -102,7 +111,9 @@ PISA_2018_sas <- read_sas("data/PISA_2018/STU/cy07_msu_stu_qqq.sas7bdat", col_se
 on convertit le fichier au format csv pour des raisons de commodités
 
 ```{r, cache = FALSE}
-write.csv(PISA_2018_sas, "data/PISA_2018.csv", row.names = FALSE)
+if (!file.exists("data/PISA_2018.csv")) {
+  write.csv(PISA_2018_sas, "data/PISA_2018.csv", row.names = FALSE)
+}
 ```
 
 Suppression des fichiers inutiles et chargement du fichier csv
@@ -156,7 +167,9 @@ PISA_2022_sas <- read_sas("data/PISA_2022/CY08MSP_STU_QQQ.SAS7BDAT", col_select 
 on convertit le fichier au format csv pour des raisons de commodités
 
 ```{r, cache = FALSE}
-write.csv(PISA_2022_sas, "data/PISA_2022.csv", row.names = FALSE)
+if (!file.exists("data/PISA_2022.csv")) {
+  write.csv(PISA_2022_sas, "data/PISA_2022.csv", row.names = FALSE)
+}
 ```
 
 Suppression des fichiers inutiles et chargement du fichier csv
@@ -647,5 +660,7 @@ Il semble intéressant de regarder également les modalités d'enseignement à d
 df_final%>%
   ggplot(aes(x= `Distance learning modalities (Global)`, fill = `Region 3`))+
   geom_bar()
+```
+```{r}
 ```
 
