@@ -3,4 +3,14 @@ title: "Final phase"
 format: pdf
 ---
 
+# research question presentation
 
+# very brief data sets descriptions
+
+# data analysis including visual representations, tests, model fitting
+
+## analyse de l'évolution du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
+
+## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
+
+# conclusion
