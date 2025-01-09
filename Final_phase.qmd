@@ -86,6 +86,19 @@ Pour étudier l'impact de la crise du covid nous avons regardé le nombre de jou
 
 ## analyse de l'évolution du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
 
+
+Afin d'étudier la relation de causalité entre l'évolution du niveau global des performances scolaires et le temps de fermture des établissements scolaires, nous allons utiliser une régression linéaire. Elle va nous permettre d'exprimer la moyenne des scores de 2022 d'un pays par discipline en fonction de celle der 2018, du temps de fermture des établissements scolaires et de la richesse. 
+
+Rappelons que nous voulions initialement rajouter la variable d'accès à internet en tant que facteur explicatif. Cependant, tous les pays y ont accès. Seule l'accès à la radio et à la télévision diffère, mais ce sont des facteurs moins pertinents pour étudier l'évolution des performances scolaires. 
+
+### test d'indépendance entre les variables explicatives
+
+Avant de commencer, il faut vérifier l'indépendance des variables explicatives entre elles. 
+
+
+
+
+
 ## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
 
 # conclusion
