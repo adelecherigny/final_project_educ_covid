@@ -1,6 +1,8 @@
 ---
 title: "Final phase"
-format: pdf
+format:
+  wordcount-html: default
+  wordcount-pdf: default
 ---
 
 # research question presentation
@@ -102,3 +104,7 @@ Avant de commencer, il faut vérifier l'indépendance des variables explicatives
 ## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
 
 # conclusion
+
+
+Nombre de mots: {{< words-total >}}
+
