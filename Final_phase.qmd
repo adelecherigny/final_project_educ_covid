@@ -159,7 +159,6 @@ summary(model)
 df_final$evolution_MATH <- df_final$Mean_MATH_2022 - df_final$Mean_MATH_2018
 model_evolution <- lm(evolution_MATH ~ closure_large_count + income_status, data = df_final)
 summary(model_evolution)
-
 ```
 Interprétation 
 
@@ -190,6 +189,10 @@ Cependant, rappelons que le R² faible (5.7%) indique que ce modèle n'explique 
 ## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
 
 # conclusion
+```{r}
+```{r}
+final<- read.csv("https://raw.githubusercontent.com/adelecherigny/final_project_educ_covid/refs/heads/main/df_final.csv?token=GHSAT0AAAAAAC27GGXUQNSCOEBZAKKM4L62Z4BCE2A")
+```
 
 
 Nombre de mots: {{< words-total >}}
