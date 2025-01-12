@@ -101,7 +101,8 @@ Avant de commencer, il faut vérifier l'indépendance des variables explicatives
 
 On charge le fichier de données : 
 ```{r}
-df_final <- read.csv("C:/Users/depgw24/Documents/GIT/final_project_educ_covid/df_final.csv")
+library(vroom)
+df_final <- vroom("https://raw.githubusercontent.com/adelecherigny/final_project_educ_covid/refs/heads/main/df_final.csv?token=GHSAT0AAAAAAC27GGXUMQEC32XIOQ6CBATSZ4DVH2Q")
 ```
 
 
