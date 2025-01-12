@@ -14,13 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-# research question presentation
+# Research question presentation
 
 ## La génération Covid : les impacts de la crise sanitaire en termes d'éducation à l'échelle internationale
 
 La différence de temps de fermeture des établissements scolaires entre les pays à cause de la pandémie de la Covid-19 a-t-elle affaibli les performances scolaires d'une part, et aggravé les inégalités scolaires d'autre part ?
 
-## une source d'inégalités générationnelles ?
+## Une source d'inégalités générationnelles ?
 
 Avec Adèle, nous nous sommes posés la question lorsque nous nous sommes rendues compte que, toutes les deux, nos professeurs liaient les mauvaises performances scolaires de notre génération, en comparaison aux précédentes générations, à la pandémie de la Covid-19 et à la fermeture des écoles, nous appelant ainsi la "génération Covid". Alors que ces remarques résonnaient de manière particulièrement déterministe, nous avions à coeur de vérifier si parler de "génération Covid" comme d'une génération qui a un capital humain inférieur aux autres générations était pertinent.
 
@@ -40,7 +40,7 @@ Une mise en valeur des inégalités sociales dans l'enseignement à distance per
 Ainsi, grâce aux données de l'UNESCO et de l'OCDE, notre projet ambitionne de mettre en lumière l'impact de la pandémie sur les performances scolaires et de potentielles inégalités générationnelles et sociales augmentées. Nos conclusions nous permettront de fournir des recommandations concrètes pour guider les décideurs politiques dans la mise en œuvre de politiques éducatives plus inclusives et résilientes face à de futures crises.
 
 
-# very brief data sets descriptions
+# Very brief data sets descriptions
 
 ## Description des data sets PISA
 
@@ -59,7 +59,7 @@ Nous allons utiliser ces datasets pour voir le niveau des élèves avant la pand
 Afin d'agréger les données PISA par pays et par discipline, nous avons suivi la méthode proposée par l'OCDE, qui consiste à calculer les moyennes des valeurs plausibles des scores aux tests PISA pour estimer les performances d'un élève à partir de tests standardisés tout en prenant en compte l'incertitude associée à ces estimations. Nous avons dû utiliser des valeurs plausibles dans la mesure où les évaluations PISA sont basées sur des tests partiels. Chaque élève ne répond qu'à un sous-ensemble des questions disponibles et il n'est ainsi pas possible de calculer directement un "score vrai" pour chaque élève.
 
 
-## description du dataset de l'UNESCO
+## Description du dataset de l'UNESCO
 
 récupérées au format xlsx, converties en csv
 
@@ -93,7 +93,7 @@ Pour étudier l'impact de la crise du covid nous avons regardé le nombre de jou
 
 
 
-# data analysis including visual representations, tests, model fitting
+# Data analysis including visual representations, tests, model fitting
 ```{r}
 library(vroom)
 df_final <- vroom("https://raw.githubusercontent.com/adelecherigny/final_project_educ_covid/refs/heads/main/df_final.csv")
@@ -114,7 +114,7 @@ modele_MeanMATH<-lm(Mean_MATH_2022 ~Mean_MATH_2018 + closure_restricted_count + 
 * La régression linéaire pour les écarts-type est donnée par l'équation: $SDMATH2022_i = \beta_0 + \beta_1 SDMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
 
 
-Ce modèle nous permet de regarder l'impact de la fermeture des écoles sur les scores PISA obtenus en 2022 tout en controlant avec les scores de 2018 et le niveau de revenu des pays qui sont des variables qui expliquent fortement le niveau des élèves d'un pays pour l'année 2022. Les inclure dans notre modèle nous permet donc de mieux voir l'effet seul de la fermeture des écoles en controlant avec les deux autres variables.
+Ce modèle nous permet de regarder l'impact de la fermeture des écoles sur les scores PISA obtenus en 2022 tout en contrôlant avec les scores de 2018 et le niveau de revenu des pays qui sont des variables qui expliquent fortement le niveau des élèves d'un pays pour l'année 2022. Les inclure dans notre modèle nous permet donc de mieux voir l'effet seul de la fermeture des écoles en controlant avec les deux autres variables.
 
 ### Les justifications du choix d'un modèle linéaire 
 Nous avons fait le choix d'un modèle linéaire, pour justifier ce choix nous devons vérifier les hypothèses d'un modèle linéaire afin de nous assurer que nous utilisons la bonne spécification.
@@ -153,19 +153,20 @@ Tous les tests montrent que notre modèle respecte les hypothèses d'un modèle 
 
 Notons ici que nous avons fait le choix de ce modèle pour l'analyse des moyennes et des écarts types des autres domaines que sont les sciences et la lecture pour des raisons similaires (les justifications étant à peu près les mêmes nous ne détaillerons pas le choix du modèle dans les sections suivantes).
 
-## analyse du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
+## Analyse du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
 
 
 Afin d'étudier la relation de causalité entre l'évolution du niveau global des performances scolaires et le temps de fermture des établissements scolaires, nous allons utiliser une régression linéaire. Elle va nous permettre d'exprimer la moyenne des scores de 2022 d'un pays par discipline en fonction de celle der 2018, du temps de fermture des établissements scolaires et de la richesse. 
 
 Rappelons que nous voulions initialement rajouter la variable d'accès à internet en tant que facteur explicatif. Cependant, tous les pays y ont accès. Seule l'accès à la radio et à la télévision diffère, mais ce sont des facteurs moins pertinents pour étudier l'évolution des performances scolaires. 
 
-### pré-analyse : justification de l'intuition
+### Pré-analyse : justification de l'intuition
 
-Notre projet est né des inquiétudes nées de la pandémie et de la fermeture des établissements au sujet du niveau scolaire, mis de nombreuses fois en avant par les médias alors. 
+Notre projet est née des inquiétudes nées de la pandémie et de la fermeture des établissements au sujet du niveau scolaire, mis de nombreuses fois en avant par les médias. 
 
 Et en effet, cette problématique peut se justifier visuellement par ce graphique suivant, qui montre l'évolution globale des performances entre 2018 et 2022 : 
 ```{r}
+library(tidyr)
 library(dplyr)
 library(ggplot2)
 
@@ -216,7 +217,7 @@ Déterminons donc la régression linéaire de la moyenne des maths de 2022 (éno
 model_Meanmath <- lm(Mean_MATH_2022 ~ Mean_MATH_2018 + income_status + closure_restricted_count, data = df_final)
 
 # Résumé du modèle
-summary(model)
+summary(model_Meanmath)
 
 ```
 
@@ -228,12 +229,12 @@ Interprétation :
 
 - L'estimation de la fermeture des établissements vaut 0,008. C'est à dire que chaque jour fermé supplémentaire est associé à une augmentation de 0,008 dans la moyenne de maths. La p-value est supérieure à 0,05 (elle vaut 0,702), ce qui révèle que la fermeture des établissements n'a pas d'effet significatif sur la moyenne de maths.
 
-- L'estimation du niveau de revenu est de 13,663, ce qui signifie que passer de la catégorie de revenu moyen (middle income) à revenu haut (high income) augmente l'évolution du score de 13,663. Cependant, la p-value associée est 0,004, ce qui est bien inférieur à 0,05, ce qui signifie que la catégorie de revenus du pays a un effet statistiquement significatif sur l'évolution des scores. 
+- L'estimation du niveau de revenu est de 13,663, ce qui signifie que passer de la catégorie de revenu moyen (middle income) à revenu haut (high income) augmente l'évolution du score de 13,663. La p-value associée est 0,004, ce qui est bien inférieur à 0,05, ce qui signifie que la catégorie de revenus du pays a un effet statistiquement significatif sur l'évolution des scores. 
 
 Le modèle est-il pertinent ? 
-- R² (Multiple R-squared) : 0.9435
+* R² (Multiple R-squared) : 0.9435
 Ainsi, 94% de la moyenne de maths en 2022 est expliquée par la moyenne de 2018, le temps de fermeture des établissements et le niveau de richesse.Le modèle est donc très performant.
-- F-statistic : 339,8
+* F-statistic : 339,8
 La statistique F teste si le modèle global (avec toutes les variables explicatives) est significatif. La p-value associée est  2.2e-16, ce qui est inférieur à 0.05. Cela suggère que le modèle dans son ensemble est statistiquement significatif.
 
 
@@ -279,7 +280,7 @@ ggplot(df_final, aes(x = closure_restricted_count, y = Mean_MATH_2022)) +
 ```
 
 En effet, ces graphiques montrent l'effet linéaire important entre la moyenne de 2018 et 2022, tandis que celui entre la moyenne de 2022 et le niveau de richesse du pays est plus faible (ce qui est aussi lié au faible degré de précision de cette variable, répartie en deux catégories seulement).
-Le dernier graphique semble montrer un effet linéaire assez important et négatif entre la moyenne de 2022 et le temps de fermeture des établissements. Cependant, il convieng d'invoquer la faible significativité de cette dernière variable révélée par la régression linéaire. 
+Le dernier graphique semble montrer un effet linéaire assez important et négatif entre la moyenne de 2022 et le temps de fermeture des établissements. Cependant, il convient d'invoquer la faible significativité de cette dernière variable révélée par la régression linéaire. 
 
 ### Analyse de la moyenne en sciences 
 
@@ -305,17 +306,15 @@ summary(model_Meanread)
 ### Conclusion
 
 Ainsi, dans les trois disciplines, les interprétations sont similaires : 
-- il y a un impact très significatif des résultats passés, ce qui signifie que la pandémie mondiale n'a pas représenté une rupture brutale en termes de niveau global des élèves, dans toutes les disciplines. 
-- le niveau de revenu du pays a un impact significatif sur les performances scolaires, dans toutes les disciplines. 
-- Enfin, le temps de fermeture des établissements scolaires n'a pas d'impact significatif dans aucune des disciplines, ce qui signifie que cette action politique exceptionnelle ne semble pas avoir marqué fortement les performances scolaires. 
+* il y a un impact très significatif des résultats passés, ce qui signifie que la pandémie mondiale n'a pas représenté une rupture brutale en termes de niveau global des élèves, dans toutes les disciplines. 
+* le niveau de revenu du pays a un impact significatif sur les performances scolaires, dans toutes les disciplines. 
+* Enfin, le temps de fermeture des établissements scolaires n'a pas d'impact significatif dans aucune des disciplines, ce qui signifie que cette action politique exceptionnelle ne semble pas avoir marqué fortement les performances scolaires. 
 
-Cependant, bien que ces trois modèles soient très performants, le modèle pour la moyenne des maths a un R**2 un peu plus élevé que les deux autres, il est donc légèrement plus performant que les autres. 
-
-
+Cependant, bien que ces trois modèles soient très performants, le modèle pour la moyenne des maths a un R² un peu plus élevé que les deux autres, il est donc légèrement plus performant que les autres. 
 
 
 
-## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
+## Analyse de l'évolution des inégalités scolaires en lien avec le temps de fermeture des établissements scolaires (grâce aux écart-types des scores)
 
 Dans cette partie nous allons analyser l'évolution des écarts-type dans les différents domaines observés. 
 L'analyse des écarts-type nous renseigne sur l'évolution des inégalités durant la période COVID et les différentes fermetures d'écoles.
@@ -328,7 +327,7 @@ La régression donne les résultats suivants:
 modele_SDmath<- lm (formula= SD_MATH_2022 ~SD_MATH_2018 + closure_restricted_count + income_status, data = df_final)
 summary(modele_SDmath)
 ```
-Pour analyser les résultats de la régression nous allons nous intéresser au coefficient des fermetures d'écoles puisque c'est la variable qui nous intéressent (les autres sont essentiellement des variables de contrôle). 
+Pour analyser les résultats de la régression nous allons nous intéresser au coefficient des fermetures d'écoles puisque c'est la variable qui nous intéresse (les autres étant essentiellement des variables de contrôle). 
 La forte significativité du coefficient nous indique que l'effet des fermetures d'écoles sur les scores de 2022 à de fortes probabilité d'être non nul. 
 De plus, on constate que ce coefficient est négatif ce qui signale une corréaltion négative entre les deux variables. Cependant, ce coefficient de -0.0297 reste assez faible ce qui nous signale un impact qui reste tout de même limité.
 Enfin, le R² est assez élevé (0.83) ce qui nous signifie que notre modèle explique assez bien la réalité.
@@ -355,10 +354,11 @@ La régression donne les résultats suivants:
 modele_SDread<- lm (formula= SD_READ_2022 ~SD_READ_2018 + closure_restricted_count + income_status, data = df_final)
 summary(modele_SDread)
 ```
-Ici le coefficient lié aux fermeture d'école n'est pas significatif est très faible, on ne peut donc pas conclure de corrélation robuste entre l'écart-type en 2022 et les fermetures d'écoles durant le COVID. 
+Ici le coefficient lié aux fermeture d'école n'est pas significatif et très faible, on ne peut donc pas conclure de corrélation robuste entre l'écart-type en 2022 et les fermetures d'écoles durant le COVID. 
 
 ### Conclusion générale sur l'analyse des écarts-types 
 L'analyse des écarts-type nous indique un effet négatif ou nul de la fermeture des écoles sur l'augmentations des inégalités. Cependant on remarque que cet effet est beaucoup plus prononcé et significatif pour les maths ce qui indique probablement une difficulté plus grande de suivre des cours de maths en distanciel que des cours de français ou de sciences. Cette augmentation des inégalités peut passer par de nombreux canaux, notamment le niveau d'éducation des parents, l'accès à un matériel informatique ou encore les conditions de confinement, mais notre étude ne nous permet pas de conclure là-dessus.
+De plus comme pour l'analyse des moyennes, les écarts types de 2018 restent fortement significatifs avec un coefficient élevé, cela signifie donc que la pandémie n'a pas constituée une rupture majeur en terme d'inégalité bien qu'elle ait participé à les accentuer.
 
 
 # Conclusion générale 
@@ -366,7 +366,7 @@ L'analyse des écarts-type nous indique un effet négatif ou nul de la fermeture
 
 Notre but initial était de tester si la fermeture des établissements scolaires avait eu un impact sur les performances scolaires. Des régressions linéaires sur les données de l'Unesco et de l'OCDE nous permettent de conclure à un impact significatif négatif de cette variable (quoique assez faible) sur les inégalités scolaires grâce à l'analyse des écarts-types des performances aux tests PISA, mais dans le même temps à une absence d'impact significatif sur le niveau global, grâce à une analyse des moyennes. 
 
-Ainsi, alors même que les performances aux tests PISA ont globalement baissé entre 2018 et 2022 ont globalement baissé, la fermeture exeptionnelle des établissements scolaires ne saurait figurer parmi les facteurs explicatifs. De cette conclusion sous-tendent plusieurs conséquences, telles qu'une remise en cause du rôle fondamental de l'école en tant que formation en présentiel ainsi que l'abandon de l'hypothèse énoncée en introduction d'une génération lésée en termes de capital humain. 
+Ainsi, alors même que les performances aux tests PISA entre 2018 et 2022 ont globalement baissé, la fermeture exeptionnelle des établissements scolaires ne saurait figurer parmi les facteurs explicatifs. De cette conclusion sous-tendent plusieurs conséquences, telles qu'une remise en cause du rôle fondamental de l'école en tant que formation en présentiel ainsi que l'abandon de l'hypothèse énoncée en introduction d'une génération lésée en termes de capital humain. 
 
 
 L'impact de la fermeture des établissements scolaires sur les inégalités scolaires pourrait quant à lui s'expliquer par des inégalités en termes d'outils numériques pour l'accès aux cours à distance. Toutefois, nos données ne nous permettent pas de vérifier cette hypothèse. 
@@ -380,11 +380,6 @@ Ce projet nous a aussi permis de mettre en valeur l'impact du niveau de richesse
  - nous n'avons pas pu prendre comme variable dépendante l'évolution de la performance entre 2022 et 2018 car le modèle ne vérifiait pas les hypothèses d'une régression OLS. Nous avons donc choisi finalement les performances de 2022. 
  - Nos données ne nous ont pas permis pas d'éprouver l'hypothèse des différences d'accès au numérique en tant que facteur explicatif de l'évolution des performances et des inégalités scolaires. 
  - Notre nombre de pays étudiés est restreint, ce qui limite la validité externe de notre analyse (notamment car il y a plus de pays développés que dans la réalité).
- 
- 
- 
-
- 
 
  
 
