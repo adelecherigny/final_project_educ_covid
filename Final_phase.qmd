@@ -85,6 +85,30 @@ Pour étudier l'impact de la crise du covid nous avons regardé le nombre de jou
 
 
 # data analysis including visual representations, tests, model fitting
+## Choix du modèle
+### Quel modèle? 
+Nous allons nous appuyer sur l'analyse de l'évolution de la moyenne en MATH pour expliquer les choix de modèles que nous avons fait nous allons regarder deux modèles de régression linéaire. 
+
+* un modèle de regression ayant pour variable explicative les écarts types de 2022
+La régression linéaire est donnée par l'équation $MeanMATH2022_i = \beta_0 + \beta_1 MeanMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
+
+```{r}
+modele1_Meanmath<- lm (formula= SD_MATH_2022 ~SD_MATH_2018 + closure_restricted_count + income_status, data = df_final)
+summary(modele1_Meanmath)
+```
+
+* un modèle de régression linéaire ayant pour variable explicative l'évolution des écart types entre 2018 et 2022: 
+La régression linéaire simple est donnée par l'équation $evolutionMeanMATH_i = \beta_0 + \beta_1 closures_i + \beta_2 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
+
+```{r}
+df_final$evolution_MATH_Mean <- df_final$Mean_MATH_2022 - df_final$Mean_MATH_2018
+modele2_Meanmath <- lm(evolution_MATH_Mean ~ closure_restricted_count + income_status, data = df_final)
+summary(modele2_Meanmath)
+```
+
+Comme nous pouvons le remarquer, le premier modèle explique très bien les données observées, comme en témoigne son R² élévé (0.82). Cependant, le coefficient élevé et très significatif associé à l'écart type de 2018 signale que la qualité de l'ajustement est en grande partie dûe à l'inclusion de cette variable dans le modèle. Ainsi bien que le modèle 1 permette de bien expliquer les données observées nous allons utilisé le modèle 2, qui en capturant directement l'évolution nous permet de mieux analyser l'effet des fermetures d'écoles sur l'évolution des scores nous permettra de répondre de manière plus pertinente à notre question de recherche.
+Notons ici que nous avons fait le choix du modèle 2 pour l'analyse des moyennes et des écarts types des autres domaines que sont les sciences et la lecture pour des raisons similaires (les justifications étant à peu près les mêmes nous ne détaillerons pas le choix du modèle dans les sections suivantes).
+
 
 ## analyse de l'évolution du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
 
