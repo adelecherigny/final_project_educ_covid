@@ -5,6 +5,15 @@ format:
   wordcount-pdf: default
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,        # Ne pas afficher le code dans le rendu
+  warning = FALSE,    # Ne pas afficher les warnings
+  message = FALSE,    # Ne pas afficher les messages
+  cache = FALSE       # Désactiver le cache
+)
+```
+
 # research question presentation
 
 ## La génération Covid : les impacts de la crise sanitaire en termes d'éducation à l'échelle internationale
