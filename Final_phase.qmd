@@ -5,6 +5,15 @@ format:
   wordcount-pdf: default
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,        # Ne pas afficher le code dans le rendu
+  warning = FALSE,    # Ne pas afficher les warnings
+  message = FALSE,    # Ne pas afficher les messages
+  cache = FALSE       # Désactiver le cache
+)
+```
+
 # research question presentation
 
 ## La génération Covid : les impacts de la crise sanitaire en termes d'éducation à l'échelle internationale
@@ -85,58 +94,61 @@ Pour étudier l'impact de la crise du covid nous avons regardé le nombre de jou
 
 
 # data analysis including visual representations, tests, model fitting
-Chargement des données: 
 ```{r}
 library(vroom)
 df_final <- vroom("https://raw.githubusercontent.com/adelecherigny/final_project_educ_covid/refs/heads/main/df_final.csv")
 ```
 ## Choix du modèle
 ### Quel modèle? 
-Nous allons nous appuyer sur l'analyse de l'évolution de la moyenne en MATH pour expliquer les choix de modèles que nous avons fait nous allons regarder le modèle de régression linéaire. 
+Nous avons fait le choix d'un modèle ayant pour variable explicative les scores PISA de 2022 et non l'évolution des scores entre 2018 et 2022, car dans le second cas le modèle ne vérifiait pas les hypothèses d'une régression OLS. 
+De plus, nous avons décidé de prendre en compte le nombre de jours de fermeture où les écoles étaient strictement fermées en excluant les jours d'ouverture partielle en raison d'une plus faible variabilité des situations lorsque les établissements scolaires sont complètement fermés. En outre, cela nous a permis d'obtenir des résultats plus significatifs.
 
-* un modèle de regression ayant pour variable explicative les écarts types de 2022
-La régression linéaire est donnée par l'équation $MeanMATH2022_i = \beta_0 + \beta_1 MeanMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
+Les régressions linéaires que nous avons décidé d'analyser sont donc les suivantes (les matières ont été modifié selon la variable étudiée). 
 
+* La régression linéaire pour les moyennes est donnée par l'équation: $MeanMATH2022_i = \beta_0 + \beta_1 MeanMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
 ```{r}
-modele_Meanmath<- lm (formula= Mean_MATH_2022 ~Mean_MATH_2018 + closure_restricted_count + income_status, data = df_final)
-summary(modele_Meanmath)
+modele_MeanMATH<-lm(Mean_MATH_2022 ~Mean_MATH_2018 + closure_restricted_count + income_status, data = df_final)
 ```
+
+
+* La régression linéaire pour les écarts-type est donnée par l'équation: $SDMATH2022_i = \beta_0 + \beta_1 SDMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
+
 
 Ce modèle nous permet de regarder l'impact de la fermeture des écoles sur les scores PISA obtenus en 2022 tout en controlant avec les scores de 2018 et le niveau de revenu des pays qui sont des variables qui expliquent fortement le niveau des élèves d'un pays pour l'année 2022. Les inclure dans notre modèle nous permet donc de mieux voir l'effet seul de la fermeture des écoles en controlant avec les deux autres variables.
 
 ### Les justifications du choix d'un modèle linéaire 
-Nous avons fait le choix d'un modèle linéaire, pour justifier ce choix nous devons vérifier les hypothèses d'un modèle liénaire afin de nous assurer que nous utilisons la bonne spécification.
+Nous avons fait le choix d'un modèle linéaire, pour justifier ce choix nous devons vérifier les hypothèses d'un modèle linéaire afin de nous assurer que nous utilisons la bonne spécification.
 
 #### Test de la linéarité 
-Pour tester la linéarité nous allons nous servir d'une représenation visuelle des résidus en fonction des valeurs ajustées du modèle:
+Pour tester la linéarité nous allons nous servir d'une représentation visuelle des résidus en fonction des valeurs ajustées du modèle:
 ```{r}
-residuals <- resid(modele_Meanmath)
-fitted_values <- fitted(modele_Meanmath)
+residuals <- resid(modele_MeanMATH)
+fitted_values <- fitted(modele_MeanMATH)
 plot(fitted_values, residuals,
      main = "Graphique des résidus vs valeurs ajustées",
      xlab = "Valeurs ajustées", ylab = "Résidus",
      pch = 16, col = "blue")
 abline(h = 0, col = "red", lwd = 2)
 ```
-Visuellement, les résidus sont répartis de manière aléatoire et ne semble pas suivre une spécification particulière on peut donc considéré que la relation entre la variable expliquée et les variables explicatives est bien liénaire.
+Visuellement, les résidus sont répartis de manière aléatoire et ne semblent pas suivre une spécification particulière on peut donc considérer que la relation entre la variable expliquée et les variables explicatives est bien linéaire.
 
 #### Test des autres hypothèses du modèle
-Pour tester les autres hypothèses de notre modèle nous allons utilser le package performance qui nous permet de tester rapidement les hypothèses d'homoscédasticité, d'autocorréaltion des résidus et de colinéarité des variables explciatives.
+Pour tester les autres hypothèses de notre modèle nous avons utiliser le package `performance` qui nous permet de tester rapidement les hypothèses d'homoscédasticité et d'autocorréaltion des résidus et de colinéarité des variables explicatives.
 ```{r}
 library(performance)
 ```
 
 ```{r}
 # Tester l'homoscédasticité
-check_heteroscedasticity(modele_Meanmath)
+check_heteroscedasticity(modele_MeanMATH)
 
 # Tester l'autocorrélation
-check_autocorrelation(modele_Meanmath)
+check_autocorrelation(modele_MeanMATH)
 
 # Vérifier la colinéarité
-check_collinearity(modele_Meanmath)
+check_collinearity(modele_MeanMATH)
 ```
-Tous les tests montrent que notre modèle respectent les hypothèses d'un modèle linéaire.
+Tous les tests montrent que notre modèle respecte les hypothèses d'un modèle linéaire.
 
 
 Notons ici que nous avons fait le choix de ce modèle pour l'analyse des moyennes et des écarts types des autres domaines que sont les sciences et la lecture pour des raisons similaires (les justifications étant à peu près les mêmes nous ne détaillerons pas le choix du modèle dans les sections suivantes).
@@ -268,31 +280,44 @@ Dans cette partie nous allons analyser l'évolution des écarts-type dans les di
 L'analyse des écarts-type nous renseigne sur l'évolution des inégalités durant la période COVID et les différentes fermetures d'écoles.
 
 ### Analyse des écarts types en mathématiques
+Nous avons estimé l'équation suivante: $SDMATH2022_i = \beta_0 + \beta_1 SDMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$
 
+La régression donne les résultats suivants: 
 ```{r}
 modele_SDmath<- lm (formula= SD_MATH_2022 ~SD_MATH_2018 + closure_restricted_count + income_status, data = df_final)
 summary(modele_SDmath)
 ```
-
+Pour analyser les résultats de la régression nous allons nous intéresser au coefficient des fermetures d'écoles puisque c'est la variable qui nous intéressent (les autres sont essentiellement des variables de contrôle). 
+La forte significativité du coefficient nous indique que l'effet des fermetures d'écoles sur les scores de 2022 à de fortes probabilité d'être non nul. 
+De plus, on constate que ce coefficient est négatif ce qui signale une corréaltion négative entre les deux variables. Cependant, ce coefficient de -0.0297 reste assez faible ce qui nous signale un impact qui reste tout de même limité.
+Enfin, le R² est assez élevé (0.83) ce qui nous signifie que notre modèle explique assez bien la réalité.
 
 ### Analyse des écarts types en sciences
+Nous avons estimé l'équation suivante: $SDSCIE2022_i = \beta_0 + \beta_1 SDSCIE2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$
+
+La régression donne les résultats suivants: 
 
 ```{r}
 modele_SDscie<- lm (formula= SD_SCIE_2022 ~SD_SCIE_2018 + closure_restricted_count + income_status, data = df_final)
 summary(modele_SDscie)
 ```
-
+Comme pour l'analyse de la régression pour les maths nous nous sommes ici intéressées au coefficient des fermetures d'écoles.
+Le coefficient est significatif au niveau de 90% de confiance ce qui est élévé mais tout de même moins que pour les maths.
+De plus, on constate que ce coefficient est négatif ce qui signale une corréaltion négative entre les deux variables. Cependant, ce coefficient de -0.0160 reste assez faible ce qui nous signale un impact qui reste tout de même limité.
 
 ### Analyse des écarts types en lecture
+Nous avons estimé l'équation suivante: $SDREAD2022_i = \beta_0 + \beta_1 SDREAD2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$
+
+La régression donne les résultats suivants: 
 
 ```{r}
 modele_SDread<- lm (formula= SD_READ_2022 ~SD_READ_2018 + closure_restricted_count + income_status, data = df_final)
 summary(modele_SDread)
 ```
-
+Ici le coefficient lié aux fermeture d'école n'est pas significatif est très faible, on ne peut donc pas conclure de corrélation robuste entre l'écart-type en 2022 et les fermetures d'écoles durant le COVID. 
 
 ### Conclusion générale sur l'analyse des écarts-types 
-
+L'analyse des écarts-type nous indique un effet négatif ou nul de la fermeture des écoles sur l'augmentations des inégalités. Cependant on remarque que cet effet est beaucoup plus prononcé et significatif pour les maths ce qui indique probablement une difficulté plus grande de suivre des cours de maths en distanciel que des cours de français ou de sciences. Cette augmentation des inégalités peut passer par de nombreux canaux, notamment le niveau d'éducation des parents, l'accès à un matériel informatique ou encore les conditions de confinement, mais notre étude ne nous permet pas de conclure là-dessus.
 
 
 # conclusion

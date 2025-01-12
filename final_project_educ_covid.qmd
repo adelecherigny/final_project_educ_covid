@@ -527,118 +527,131 @@ library(patchwork)
 ### Moyennes des scores
 #### Maths
 ```{r}
-graph_mean_math_2018<-df_final%>%
-  ggplot(aes(x= Mean_MATH_2018)) + 
-  geom_density() 
-```
-
-```{r}
-graph_mean_math_2022<-df_final%>%
-  ggplot(aes(x= Mean_MATH_2022)) + 
-  geom_density()
-```
-
-```{r}
-graph_mean_math_2018 + graph_mean_math_2022 
+df_final %>%
+  ggplot(aes(x = Mean_MATH_2018)) + 
+  geom_density(aes(color = "2018")) +  
+  geom_rug(aes(color = "2018"), alpha = 0.5) +   
+  geom_density(aes(x = Mean_MATH_2022, color = "2022")) +   
+  geom_rug(aes(x = Mean_MATH_2022, color = "2022"), alpha = 0.5) +   
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) +  
+  labs(color = "Year") +  
+  theme_minimal()  
 ```
 #### Sciences
 ```{r}
-graph_mean_scie_2018<-df_final%>%
-  ggplot(aes(x= Mean_SCIE_2018)) + 
-  geom_density() 
-```
-
-```{r}
-graph_mean_scie_2022<-df_final%>%
-  ggplot(aes(x= Mean_SCIE_2022)) + 
-  geom_density()
-```
-
-```{r}
-graph_mean_scie_2018 + graph_mean_scie_2022 
+df_final %>%
+  ggplot(aes(x = Mean_SCIE_2018)) + 
+  geom_density(aes(color = "2018")) +  
+  geom_rug(aes(color = "2018"), alpha = 0.5) +  
+  geom_density(aes(x = Mean_SCIE_2022, color = "2022")) +  
+  geom_rug(aes(x = Mean_SCIE_2022, color = "2022"), alpha = 0.5) +   
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) + 
+  labs(color = "Year") + 
+  theme_minimal()   
 ```
 
 #### Lecture
 ```{r}
-graph_mean_read_2018<-df_final%>%
-  ggplot(aes(x= Mean_READ_2018)) + 
-  geom_density() 
-```
-
-```{r}
-graph_mean_read_2022<-df_final%>%
-  ggplot(aes(x= Mean_READ_2022)) + 
-  geom_density()
-```
-
-```{r}
-graph_mean_read_2018 + graph_mean_read_2022 
+df_final %>%
+  ggplot(aes(x = Mean_READ_2018)) + 
+  geom_density(aes(color = "2018")) + 
+  geom_rug(aes(color = "2018"), alpha = 0.5) +   
+  geom_density(aes(x = Mean_READ_2022, color = "2022")) +   
+  geom_rug(aes(x = Mean_READ_2022, color = "2022"), alpha = 0.5) +   
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) +  
+  labs(color = "Year") +   
+  theme_minimal()   
 ```
 
 
 ### Écarts types des scores
 #### Maths
 ```{r}
-graph_sd_math_2018<-df_final%>%
-  ggplot(aes(x= SD_MATH_2018)) + 
-  geom_density() 
-```
-
-```{r}
-graph_sd_math_2022<-df_final%>%
-  ggplot(aes(x= SD_MATH_2022)) + 
-  geom_density()
-```
-
-```{r}
-graph_sd_math_2018 + graph_sd_math_2022 
+df_final %>%
+  ggplot(aes(x = SD_MATH_2018)) + 
+  geom_density(aes(color = "2018")) +  
+  geom_rug(aes(color = "2018"), alpha = 0.5) +   
+  geom_density(aes(x = SD_MATH_2022, color = "2022")) + 
+  geom_rug(aes(x = SD_MATH_2022, color = "2022"), alpha = 0.5) +  
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) + 
+  labs(color = "Year") +  
+  theme_minimal()  
 ```
 #### Sciences
 ```{r}
-graph_sd_scie_2018<-df_final%>%
-  ggplot(aes(x= SD_SCIE_2018)) + 
-  geom_density() 
-```
+df_final %>%
+  ggplot(aes(x = SD_SCIE_2018)) + 
+  geom_density(aes(color = "2018")) + 
+  geom_rug(aes(color = "2018"), alpha = 0.5) +  
+  geom_density(aes(x = SD_SCIE_2022, color = "2022")) +   
+  geom_rug(aes(x = SD_SCIE_2022, color = "2022"), alpha = 0.5) +  
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) +  
+  labs(color = "Year") +  
+  theme_minimal()   
 
-```{r}
-graph_sd_scie_2022<-df_final%>%
-  ggplot(aes(x= SD_SCIE_2022)) + 
-  geom_density()
-```
-
-```{r}
-graph_sd_scie_2018 + graph_sd_scie_2022 
 ```
 
 #### Lecture
 
 ```{r}
-graph_sd_read_2018<-df_final%>%
-  ggplot(aes(x= SD_READ_2018)) + 
-  geom_density() 
+df_final %>%
+  ggplot(aes(x = SD_READ_2018)) + 
+  geom_density(aes(color = "2018")) + 
+  geom_rug(aes(color = "2018"), alpha = 0.5) +   
+  geom_density(aes(x = SD_READ_2022, color = "2022")) +   
+  geom_rug(aes(x = SD_READ_2022, color = "2022"), alpha = 0.5) +   
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) +   
+  labs(color = "Year") +  
+  theme_minimal()   
+```
+```{r}
+df_final %>%
+  ggplot(aes(x = SD_READ_2018)) + 
+  geom_density(aes(color = "2018")) +  
+  geom_density(aes(x = SD_READ_2022, color = "2022")) + 
+  geom_rug(aes(color = "2018"), alpha = 0.5) +   
+  geom_rug(aes(x = SD_READ_2022, color = "2022"), alpha = 0.5) +  
+  scale_color_manual(values = c("2018" = "blue", "2022" = "red")) +  
+  labs(color = "Year") +   
+  theme_minimal()   
 ```
 
-```{r}
-graph_sd_read_2022<-df_final%>%
-  ggplot(aes(x= SD_READ_2022)) + 
-  geom_density()
-```
 
-```{r}
-graph_sd_read_2018 + graph_sd_read_2022 
-```
+
 #### Fermetures des écoles 
 Graphique avec la prise en compte élargie de la fermeture des écoles (partielle et totale).
 ```{r}
 df_final%>%
   ggplot(aes(x= closure_large_count))+
-  geom_density()
+  geom_density() + 
+  geom_rug(alpha = 0.5)
 ```
+```{r}
+library(ggplot2)
+library(dplyr)
+
+mean_closure <- mean(df_final$closure_large_count, na.rm = TRUE)
+sd_closure <- sd(df_final$closure_large_count, na.rm = TRUE)
+
+df_final %>%
+  ggplot(aes(x = closure_large_count)) +
+  geom_density(fill = "lightblue", alpha = 0.6) +
+  geom_rug(sides = "b", color = "darkblue") +
+  geom_vline(aes(xintercept = mean_closure), color = "red", linetype = "dashed") +
+  labs(title = "Distribution de closure_large_count avec moyenne", 
+       x = "Closure Large Count", y = "Densité") +
+  theme_minimal() +
+  theme(axis.text = element_text(size = 12), axis.title = element_text(size = 14))
+
+```
+
+
 Graphique avec la prise en compte restreinte de la fermeture des écoles (seulement totale).
 ```{r}
 df_final%>%
   ggplot(aes(x= closure_restricted_count))+
-  geom_density()
+  geom_density() + 
+  geom_rug(alpha=0.5)
 ```
 ### Niveau de revenu des pays 
 ```{r}
@@ -667,8 +680,6 @@ Création de la variable indicatrice pour le niveau de richesse. Compte tenu des
 
 ```{r}
 library(dplyr)
-
-# Utilisation de mutate et case_when pour créer la variable binaire
 df_final <- df_final %>%
   mutate(income_status = case_when(
     `Region 3` == "WB: High income" ~ 1,
