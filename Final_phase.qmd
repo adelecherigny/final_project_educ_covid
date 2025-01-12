@@ -302,12 +302,12 @@ summary(model_Meanread)
 ```
 
 
-### conclusion
+### Conclusion
 
 Ainsi, dans les trois disciplines, les interprétations sont similaires : 
 - il y a un impact très significatif des résultats passés, ce qui signifie que la pandémie mondiale n'a pas représenté une rupture brutale en termes de niveau global des élèves, dans toutes les disciplines. 
 - le niveau de revenu du pays a un impact significatif sur les performances scolaires, dans toutes les disciplines. 
-- Enfin, le temps de fermeture des établissements scolaires n'a pas d'impact significatif dans aucune des disciplines, ce qui signifie que cette action politique exceptionnelle ne semble pas avoir marqué fortement les performances scolaires. De cette interprétation sous-tendent plusieurs conséquences, comme une remise en cause du rôle fondamental de l'école en tant que formation en présentiel ainsi qu'un abandon de l'hypothèse d'une génération lésée en termes de capital humain. 
+- Enfin, le temps de fermeture des établissements scolaires n'a pas d'impact significatif dans aucune des disciplines, ce qui signifie que cette action politique exceptionnelle ne semble pas avoir marqué fortement les performances scolaires. 
 
 Cependant, bien que ces trois modèles soient très performants, le modèle pour la moyenne des maths a un R**2 un peu plus élevé que les deux autres, il est donc légèrement plus performant que les autres. 
 
@@ -361,8 +361,25 @@ Ici le coefficient lié aux fermeture d'école n'est pas significatif est très 
 L'analyse des écarts-type nous indique un effet négatif ou nul de la fermeture des écoles sur l'augmentations des inégalités. Cependant on remarque que cet effet est beaucoup plus prononcé et significatif pour les maths ce qui indique probablement une difficulté plus grande de suivre des cours de maths en distanciel que des cours de français ou de sciences. Cette augmentation des inégalités peut passer par de nombreux canaux, notamment le niveau d'éducation des parents, l'accès à un matériel informatique ou encore les conditions de confinement, mais notre étude ne nous permet pas de conclure là-dessus.
 
 
-# conclusion
+# Conclusion générale 
+
+
+Notre but initial était de tester si la fermeture des établissements scolaires avait eu un impact sur les performances scolaires. Des régressions linéaires sur les données de l'Unesco et de l'OCDE nous permettent de conclure à un impact significatif négatif de cette variable (quoique assez faible) sur les inégalités scolaires grâce à l'analyse des écarts-types des performances aux tests PISA, mais dans le même temps à une absence d'impact significatif sur le niveau global, grâce à une analyse des moyennes. 
+
+Ainsi, alors même que les performances aux tests PISA ont globalement baissé entre 2018 et 2022 ont globalement baissé, la fermeture exeptionnelle des établissements scolaires ne saurait figurer parmi les facteurs explicatifs. De cette conclusion sous-tendent plusieurs conséquences, telles qu'une remise en cause du rôle fondamental de l'école en tant que formation en présentiel ainsi que l'abandon de l'hypothèse énoncée en introduction d'une génération lésée en termes de capital humain. 
+
+
+L'impact de la fermeture des établissements scolaires sur les inégalités scolaires pourrait quant à lui s'expliquer par des inégalités en termes d'outils numériques pour l'accès aux cours à distance. Toutefois, nos données ne nous permettent pas de vérifier cette hypothèse. 
+De plus, l'augmentation des inégalités scolaires concernent particulièrement les mathématiques, peut-être car cette matière est plus difficilement enseignable à distance. 
+
+Notre intuition de départ a donc été partiellement vérifiée. 
+
+Ce projet nous a aussi permis de mettre en valeur l'impact du niveau de richesse du pays sur le niveau global aux tests PISA, ainsi que sur les inégalités. 
  
+ Dans ce projet, nous avons été confrontées à plusieurs limites méthodologiques : 
+ - nous n'avons pas pu prendre comme variable dépendante l'évolution de la performance entre 2022 et 2018 car le modèle ne vérifiait pas les hypothèses d'une régression OLS. Nous avons donc choisi finalement les performances de 2022. 
+ - Nos données ne nous ont pas permis pas d'éprouver l'hypothèse des différences d'accès au numérique en tant que facteur explicatif de l'évolution des performances et des inégalités scolaires. 
+ - Notre nombre de pays étudiés est restreint, ce qui limite la validité externe de notre analyse (notamment car il y a plus de pays développés que dans la réalité).
  
  
  
