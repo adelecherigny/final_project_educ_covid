@@ -98,7 +98,7 @@ Nous allons nous appuyer sur l'analyse de l'évolution de la moyenne en MATH pou
 La régression linéaire est donnée par l'équation $MeanMATH2022_i = \beta_0 + \beta_1 MeanMATH2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
 
 ```{r}
-modele_Meanmath<- lm (formula= SD_MATH_2022 ~SD_MATH_2018 + closure_restricted_count + income_status, data = df_final)
+modele_Meanmath<- lm (formula= Mean_MATH_2022 ~Mean_MATH_2018 + closure_restricted_count + income_status, data = df_final)
 summary(modele_Meanmath)
 ```
 
@@ -242,9 +242,27 @@ L'analyse des écarts-type nous renseigne sur l'évolution des inégalités dura
 
 ### Analyse des écarts types en mathématiques
 
+```{r}
+modele_SDmath<- lm (formula= SD_MATH_2022 ~SD_MATH_2018 + closure_restricted_count + income_status, data = df_final)
+summary(modele_SDmath)
+```
+
+
 ### Analyse des écarts types en sciences
 
+```{r}
+modele_SDscie<- lm (formula= SD_SCIE_2022 ~SD_SCIE_2018 + closure_restricted_count + income_status, data = df_final)
+summary(modele_SDscie)
+```
+
+
 ### Analyse des écarts types en lecture
+
+```{r}
+modele_SDread<- lm (formula= SD_READ_2022 ~SD_READ_2018 + closure_restricted_count + income_status, data = df_final)
+summary(modele_SDread)
+```
+
 
 ### Conclusion générale sur l'analyse des écarts-types 
 
