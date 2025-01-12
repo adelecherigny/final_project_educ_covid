@@ -102,9 +102,6 @@ Avant de commencer, il faut vérifier l'indépendance des variables explicatives
 On charge le fichier de données : 
 
 
-```{r}
-df_final <- read.csv("https://raw.githubusercontent.com/adelecherigny/final_project_educ_covid/refs/heads/main/df_final.csv?token=GHSAT0AAAAAAC5CGZJQL2Y37RAJ2ZF5YPGMZ4BCCDQ")
-```
 
 
 ```{r}
@@ -195,26 +192,28 @@ library(ggplot2)
 # Graphique de dispersion de l'évolution des moyennes en fonction de closure_large_count
 ggplot(df_final, aes(x = closure_large_count, y = evolution_MATH)) +
   geom_point(aes(color = income_status), size = 3) +
-  labs(x = "Fermeture des écoles (closure_large_count)", y = "Evolution des Moyennes (2018-2022)", color = "Statut économique") +
+   geom_smooth(method = "lm", color = "black", se = TRUE) +
+ labs(
+    title = "Impact des Fermetures d'Écoles sur l'Évolution des Performances en Mathématiques",
+    x = "Fermeture des Écoles (closure_large_count)",
+    y = "Évolution des Moyennes en Mathématiques (2018-2022)",
+    color = "Niveau de Richesse"
+  ) +
   theme_minimal()
 
 ```
 
 Ainsi les pays à haut revenu semblent avoir fermé plus longtemps leur établissements scolaires que les pays à revenu moyen, ce qui remet en cause l'intuition que les élèves des pays à revenu moyen ont plus pâti que ceux des pays à revenu élevé. 
 
-```{r}
-# Boxplot pour comparer les scores de 2018 et 2022 par statut économique
-ggplot(df_final, aes(x = income_status, y = Mean_MATH_2018)) +
-  geom_boxplot() +
-  labs(x = "Statut économique", y = "Scores MATH 2018") +
-  theme_minimal()
-```
+
+
+
+
 
 
 ## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
 
 # conclusion
-```{r}
 ```{r}
 final<- read.csv("https://raw.githubusercontent.com/adelecherigny/final_project_educ_covid/refs/heads/main/df_final.csv?token=GHSAT0AAAAAAC27GGXUQNSCOEBZAKKM4L62Z4BCE2A")
 ```
