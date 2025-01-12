@@ -141,99 +141,126 @@ Tous les tests montrent que notre modèle respectent les hypothèses d'un modèl
 
 Notons ici que nous avons fait le choix de ce modèle pour l'analyse des moyennes et des écarts types des autres domaines que sont les sciences et la lecture pour des raisons similaires (les justifications étant à peu près les mêmes nous ne détaillerons pas le choix du modèle dans les sections suivantes).
 
-## analyse de l'évolution du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
+## analyse du niveau global des performances scolaires en lien avec le temps de fermture des établissements scolaires (grâce à la moyenne des scores)
 
 
 Afin d'étudier la relation de causalité entre l'évolution du niveau global des performances scolaires et le temps de fermture des établissements scolaires, nous allons utiliser une régression linéaire. Elle va nous permettre d'exprimer la moyenne des scores de 2022 d'un pays par discipline en fonction de celle der 2018, du temps de fermture des établissements scolaires et de la richesse. 
 
 Rappelons que nous voulions initialement rajouter la variable d'accès à internet en tant que facteur explicatif. Cependant, tous les pays y ont accès. Seule l'accès à la radio et à la télévision diffère, mais ce sont des facteurs moins pertinents pour étudier l'évolution des performances scolaires. 
 
-### la moyenne des maths 
+### Analyse de la moyenne des maths :
 
-#### test d'indépendance entre les variables explicatives
-
-Avant de commencer, il faut vérifier l'indépendance des variables explicatives entre elles. 
-
-```{r}
-cor(df_final$Mean_MATH_2018, df_final$income_status, method = "pearson")
-```
-La valeur de Pearson varie théoriquement entre -1 et 1, 1 représentant une corrélation positive parfaite, -1 une corrélation négative parfaite et 0 pas de corrélation linéaire. 0,692 indique donc une corrélation positive assez forte entre les deux variables. Ainsi, lorsque le niveau de richesse d'un pays augmente, il y a tendance à observer une augmentation des scores moyens en mathématiques. 
-
-```{r}
-plot(df_final$income_status, df_final$Mean_MATH_2018,
-     main = "Relation entre income_status et Mean_MATH_2018",
-     xlab = "Income Status",
-     ylab = "Mean Math 2018",
-     pch = 16, col = "blue")
-abline(lm(df_final$Mean_MATH_2018 ~ df_final$income_status), col = "red")
-```
-
-```{r}
-cor.test(df_final$Mean_MATH_2018, df_final$income_status, method = "pearson")
-```
-la p-value vaut  1.713e-10, ce qui est extrêmement faible. Ainsi la corrélation observée est hautement significative. 
-
-
-#### régression linéaire
-
-Vérifions que  les variables explicatives a une relation linéaire avec la moyenne des scores de maths en 2022 (la variable dépendante).
-
-```{r}
-plot(df_final$Mean_MATH_2018,df_final$Mean_MATHS_2022)
-plot(df_final$income_status,df_final$Mean_MATHS_2022)
-plot(df_final$closure_large_count,df_final$Mean_MATHS_2022)
-
-```
-Bilan : ???
-
-Si la relation entre les variables explicatives et la variable dépendante n'est pas linéaire, envisagez une transformation (logarithmique, carrée, etc.).
-
-Vérifions qu'il n'y a pas de valeurs manquantes. 
+Vérifions qu'il n'y a pas de valeurs manquantes afin de garantir le fonctionnement de chaque analyse de manière générale :
 ```{r}
 sum(is.na(df_final))
 ```
-Il n'y a aucune valeur manquante. 
+La fonction 'sum' nous permet de montrer qu'il n'y a aucune valeur manquante. 
 
 
+Déterminons donc la régression linéaire de la moyenne des maths de 2022 (énoncée auparavant)
 ```{r}
 # Modèle de régression linéaire
-model <- lm(Mean_MATH_2022 ~ Mean_MATH_2018 + income_status + closure_large_count, data = df_final)
+model_Meanmath <- lm(Mean_MATH_2022 ~ Mean_MATH_2018 + income_status + closure_restricted_count, data = df_final)
 
 # Résumé du modèle
 summary(model)
 
 ```
 
-```{r}
-df_final$evolution_MATH <- df_final$Mean_MATH_2022 - df_final$Mean_MATH_2018
-model_evolution <- lm(evolution_MATH ~ closure_large_count + income_status, data = df_final)
-summary(model_evolution)
-```
-Interprétation 
+Interprétation :
 
-- Les résidus, qui  indiquent la différence entre les valeurs observées et celles prédites par le modèle, montrent une certaine variation, ce qui pourrait être dû à la présence d'outliers ou de valeurs extrêmes.
+- Les résidus, qui  indiquent la différence entre les valeurs observées et celles prédites par le modèle, montrent une distribution relativement équilibrée autour de zéro, ce qui est bon signe puisque cela signifie que le modèle n'a pas de biais systématique. En effet, la médiane des résidus est proche de zéro (0.968), et les 1er et 3e quartiles montrent une répartition relativement symétrique (entre -6.501 et 5.509). 
 
-- L'estimation de l'intercept (l'ordonnée à l'origine) vaut -22,77. Cela signifie que sans prendre en compte l'effet de la fermeture des établissements scolaires et du niveau de richesses des pays, l'évolution des moyennes en maths entre 2018 et 2022 est négative. 
+- L'estimation de l'intercept (l'ordonnée à l'origine) vaut 43,17. Cela signifie que sans prendre en compte l'effet de la fermeture des établissements scolaires et du niveau de richesses des pays, la moyenne en maths entre 2018 et 2022 vaut 43,17. 
 
-- L'estimation de la fermeture des établissements vaut 0,023. C'est à dire que chaque jour fermé supplémentaire est associé à une augmentation de 0;023 dans l'évolution des scores. Cependant, la p-value associée est 0,0654, ce qui est légèrement supérieur à 0,05, suggérant qe cet effet n'est que marginalement significatif. 
+- L'estimation de la fermeture des établissements vaut 0,008. C'est à dire que chaque jour fermé supplémentaire est associé à une augmentation de 0,008 dans la moyenne de maths. La p-value est supérieure à 0,05 (elle vaut 0,702), ce qui révèle que la fermeture des établissements n'a pas d'effet significatif sur la moyenne de maths.
 
-- L'estimation du niveau de revenu est de 5,318, ce qui signifie que passer de la catégorie de revenu moyen (middle income) à revenu haut (high income) augmente l'évolution du score de 5,318. Cependant, la p-value associée est 0,0192, ce qui est bien supéreiur à 0,05, ce qui signifie que la catégorie de revenus du pays n'a pas d'effet statistiquement significatif sur l'évolution des scores. 
+- L'estimation du niveau de revenu est de 13,663, ce qui signifie que passer de la catégorie de revenu moyen (middle income) à revenu haut (high income) augmente l'évolution du score de 13,663. Cependant, la p-value associée est 0,004, ce qui est bien inférieur à 0,05, ce qui signifie que la catégorie de revenus du pays a un effet statistiquement significatif sur l'évolution des scores. 
 
 Le modèle est-il pertinent ? 
-- R² (Multiple R-squared) : 0.05696
-Seulement 5.7% de la variance de l'évolution des scores est expliquée par les variables closure_large_count et income_status. Cela suggère que le modèle n'explique pas bien la variabilité des données.
-- F-statistic : 1.872
-La statistique F teste si le modèle global (avec toutes les variables explicatives) est significatif. La p-value associée est 0.1624, ce qui est bien supérieur à 0.05. Cela suggère que le modèle dans son ensemble n'est pas statistiquement significatif.
+- R² (Multiple R-squared) : 0.9435
+Ainsi, 94% de la moyenne de maths en 2022 est expliquée par la moyenne de 2018, le temps de fermeture des établissements et le niveau de richesse.Le modèle est donc très performant.
+- F-statistic : 339,8
+La statistique F teste si le modèle global (avec toutes les variables explicatives) est significatif. La p-value associée est  2.2e-16, ce qui est inférieur à 0.05. Cela suggère que le modèle dans son ensemble est statistiquement significatif.
 
 
 
-Ainsi, à partir de ce modèle, on peut conclure à un effet limité de la pandémie sur les performances scolaires en mathématiques. 
-- Bien que l'impact du statut économique ne soit pas significatif ici, on pourrait s'attendre à ce qu'il joue un rôle majeur dans l'accès aux ressources éducatives pendant la pandémie, par exemple en termes d'accès à des cours en ligne, de soutien parental ou de conditions de vie favorables à l'apprentissage. Le fait que income_status ne soit pas significatif dans ce modèle pourrait suggérer que d'autres facteurs non capturés dans ce modèle sont plus importants pour comprendre l'impact de la pandémie.
+Ainsi, à partir de ce modèle, on peut conclure que 
 
-- Le fait que l'indicateur de fermeture des écoles (closure_large_count) montre un effet marginalement significatif sur l’évolution des performances scolaires (p-value de 0.065) pourrait suggérer que les fermetures d'écoles ont eu un impact, mais cet effet est faible et pourrait ne pas être détecté de manière significative dans ce modèle particulier. Cela pourrait signifier que, bien que la fermeture des établissements ait eu un effet, d'autres facteurs (comme la qualité de l'enseignement à distance ou les disparités locales) influencent davantage les résultats scolaires.
+- notre intuition comme quoi la fermeture des établissements scolaires en lien avec la pandémie mondiale de 2020 aurait eu un impact significatif sur les performances scolaires serait infondée. L'analyse de l'évolution de la moyenne des performances pour les autres disciplines, ainsi que celle de leur écart-type nous confirmera ou non cette voie. 
+
+- le niveau de richesses des pays a bien un impact sur les performances scolaires en mathématiques, ce qui donne à réfléchir sur le lien entre inégalités sociales et inégalités scolaires. Cet impact a peut être été d'autant plus fort pendant la pandémie à cause des inégalités en termes d'offre et d'accès aux cours en ligne. 
+
+- Bien que le modèle soit très significatif, la majeure partie de cette significativité est liée aux performances passées (à la moyenne en maths en 2018).
 
 
-Cependant, rappelons que le R² faible (5.7%) indique que ce modèle n'explique qu'une petite proportion de la variation de l'évolution des performances scolaires. Cela suggère qu'il existe probablement de nombreux autres facteurs non inclus dans ce modèle qui jouent un rôle clé dans l'impact de la pandémie sur les performances scolaires.
+Les prochaines analyses suivront la méthode de cette dernière, c'est pourquoi nous détaillerons moins en passant directement aux interprétations. 
+
+
+Ces mêmes interprétations peuvent être obtenues visuellement : 
+
+```{r}
+library(ggplot2)
+ggplot(df_final, aes(x = Mean_MATH_2018, y = Mean_MATH_2022)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+   ggtitle("Relation entre les résultats en Mathématiques 2018 et 2022")
+
+```
+
+```{r}
+ggplot(df_final, aes(x = income_status, y = Mean_MATH_2022)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+ ggtitle("Relation entre le niveau de revenu du pays et les résultats en Mathématiques 2022")
+
+```
+
+```{r}
+library(ggplot2)
+ggplot(df_final, aes(x = closure_restricted_count, y = Mean_MATH_2022)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+   ggtitle("Relation entre le temps de fermeture des établissements scolaires et les résultats en Mathématiques 2022")
+
+```
+
+En effet, ces graphiques montrent l'effet linéaire important entre la moyenne de 2018 et 2022, tandis que celui entre la moyenne de 2022 et le niveau de richesse du pays est plus faible (ce qui est aussi lié au faible degré de précision de cette variable, répartie en deux catégories seulement).
+Le dernier graphique semble montrer un effet linéaire assez important et négatif entre la moyenne de 2022 et le temps de fermeture des établissements. Cependant, il convieng d'invoquer la faible significativité de cette dernière variable révélée par la régression linéaire. 
+
+### Analyse de la moyenne en sciences 
+
+Déterminons donc la régression linéaire de la moyenne en sciences de 2022.
+Elle est donnée par l'équation $MeanSCIE2022_i = \beta_0 + \beta_1 MeanSCIE2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
+```{r}
+model_Meanscie <- lm(Mean_SCIE_2022 ~ Mean_SCIE_2018 + income_status + closure_restricted_count, data = df_final)
+summary(model_Meanscie)
+
+```
+
+### Analyse de la moyenne en lecture
+
+Déterminons donc la régression linéaire de la moyenne en lecture de 2022.
+Elle est donnée par l'équation $MeanREAD2022_i = \beta_0 + \beta_1 MeanREAD2018_i + \beta_2 closures_i + \beta_3 income_i+\epsilon_i$, i désigne le pays auquel font référence les données.
+```{r}
+model_Meanread <- lm(Mean_READ_2022 ~ Mean_READ_2018 + income_status + closure_restricted_count, data = df_final)
+summary(model_Meanread)
+
+```
+
+
+### conclusion
+
+Ainsi, dans les trois disciplines, les interprétations sont similaires : 
+- il y a un impact très significatif des résultats passés, ce qui signifie que la pandémie mondiale n'a pas représenté une rupture brutale en termes de niveau global des élèves, dans toutes les disciplines. 
+- le niveau de revenu du pays a un impact significatif sur les performances scolaires, dans toutes les disciplines. 
+- Enfin, le temps de fermeture des établissements scolaires n'a pas d'impact significatif dans aucune des disciplines, ce qui signifie que cette action politique exceptionnelle ne semble pas avoir marqué fortement les performances scolaires. De cette interprétation sous-tendent plusieurs conséquences, comme une remise en cause du rôle fondamental de l'école en tant que formation en présentiel ainsi qu'un abandon de l'hypothèse d'une génération lésée en termes de capital humain. 
+
+Cependant, bien que ces trois modèles soient très performants, le modèle pour la moyenne des maths a un R**2 un peu plus élevé que les deux autres, il est donc légèrement plus performant que les autres. 
+
+
+
+
 
 ## analyse de l'évolution des inégalités scolaires en lien avec le temps de fermture des établissements scolaires (grâce aux écart-types des scores)
 
