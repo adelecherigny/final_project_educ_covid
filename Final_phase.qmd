@@ -160,6 +160,47 @@ Afin d'étudier la relation de causalité entre l'évolution du niveau global de
 
 Rappelons que nous voulions initialement rajouter la variable d'accès à internet en tant que facteur explicatif. Cependant, tous les pays y ont accès. Seule l'accès à la radio et à la télévision diffère, mais ce sont des facteurs moins pertinents pour étudier l'évolution des performances scolaires. 
 
+### pré-analyse : justification de l'intuition
+
+Notre projet est né des inquiétudes nées de la pandémie et de la fermeture des établissements au sujet du niveau scolaire, mis de nombreuses fois en avant par les médias alors. 
+
+Et en effet, cette problématique peut se justifier visuellement par ce graphique suivant, qui montre l'évolution globale des performances entre 2018 et 2022 : 
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Calcul de la différence entre les moyennes de 2022 et 2018
+df_diff <- df_final %>%
+  mutate(
+    diff_MATH = Mean_MATH_2022 - Mean_MATH_2018,
+    diff_SCIE = Mean_SCIE_2022 - Mean_SCIE_2018,
+    diff_READ = Mean_READ_2022 - Mean_READ_2018
+  ) %>%
+  select(diff_MATH, diff_SCIE, diff_READ)
+
+# Mettre les différences dans un format long pour un graphique
+df_diff_long <- df_diff %>%
+  gather(key = "Subject", value = "Difference")
+
+# Créer un graphique en barres pour visualiser les différences
+ggplot(df_diff_long, aes(x = Subject, y = Difference, fill = Subject)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  labs(
+    title = "Évolution des Moyennes entre 2018 et 2022 par Matière",
+    x = "Matière",
+    y = "Différence de Moyenne (2022 - 2018)"
+  ) +
+  scale_fill_manual(values = c("blue", "green", "purple")) +
+  theme_minimal() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black")  # Ligne pour 0, pour voir si positif ou négatif
+
+```
+
+Ce graphique montre ainsi que les performances ont globalement évolué négativement entre les deux tests, particulièrement en mathématiques et en lecture. Or, la pandémie étant intervenue entre les deux tests, nous pouvons penser que la fermeture exceptionnelle des établissements scolaires représente un facteur explicatif de cette baisse générale de niveau. 
+
+Nous allons désormais vérifier cette hypothèse par discipline grâce aux régressions linéaires : 
+
+
 ### Analyse de la moyenne des maths :
 
 Vérifions qu'il n'y a pas de valeurs manquantes afin de garantir le fonctionnement de chaque analyse de manière générale :
